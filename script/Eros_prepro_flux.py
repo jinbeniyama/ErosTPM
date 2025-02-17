@@ -458,7 +458,6 @@ if __name__ == "__main__":
     print(f"  Columns: {df_A.columns.tolist()}")
     # 5. AKARI/IRC ============================================================
 
-    # TODO: SNR cut here?
 
     # Make a single merged file
     df = pd.concat([df_H99, df_L05, df_W08, df_S, df_A])
