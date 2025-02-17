@@ -19,14 +19,20 @@ Skip and go to "Plot figures" if you just make figures in the paper.
 1. Do TPM with brute-force method
 ```
 bash 1_ErosTPM.sh (obj file) (spin file) (obs file) (ephemeris file) (output directory)
-bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_20250110.txt 433_eph_20250110.txt .
+bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_20250110.txt 433_eph_20250110.txt TPMresult
 ```
 
-2. Make neural-network model to predict thermal flux
+2. Make neural-network (NN) model to predict thermal flux
+```
+bash 2_makeNNmodel.sh (directory with output files of 1.)
+bash 2_makeNNmodel.sh TPMresult
+```
 
-3. Predict thermal fluxes with single-component TPM
-
-4. Predict thermal fluxes with single-component TPM
+3. Predict thermal fluxes with the NN model
+```
+bash 3_predictflux.sh (directory with output files of 2.)
+bash 3_predictflux.sh 
+```
 
 ## Plot figures
 Do all commands in /plot.
