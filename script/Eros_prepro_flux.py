@@ -12,18 +12,177 @@ Preprocesses of thermal fluxes of Eros.
 import os 
 from argparse import ArgumentParser as ap
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from astroquery.jplhorizons import Horizons
 from astropy.constants import c, au
 from astropy.time import Time
 
-from myplot import mycolor
+
+def Eros_Harris1999(f):
+    """
+
+    Parameter
+    ---------
+    f : str
+        Spectra of Eros in Harris+1999
+
+    Return
+    ------
+    df : pandas.DataFrame
+        dataframe
+    """
+    ## UKIRT/Michelle in 1998 June
+    # Originally provided "Eros_UKIRT_June_1998.txt" by Alan Harris. Thanks!
+    # The given times refer (roughly!) to the mid-point of the set of exposures taken on each date.
+
+    # Wavelength [micron], Flux [mJy], Flux error [mJy]
+    # June 27 at 07:00: 2 spectra (8--13 micron)
+    # June 29 at 06:00: 2 spectra (8--13 micron)
+    # June 30 at 07:00: 3 spectra (8--13 micron)
+    # June 28 at 06:00: 2 spectra (16--24 micron) -> these are used as well
+    
+    # A bit more searching has led me to the following timing information:
+    # UT Date/time    Obs. no.
+    # 1998 June                    
+    # 27/0632      22  
+    #    0733      34
+    # 29/0549      27
+    #    0557      28
+    # 30/0553     25
+    #    0708     38
+    #    0808     45
+    # 28/0553      17       
+    #    0609      19
+    idx_spec = 0
+    df_list = []
+    with open(f, "r") as f:
+        lines = f.readlines()
+        for idx_l, l in enumerate(lines):
+            if l[0:4] == "1998":
+                # make list
+                jd_list = []
+                w_list, f_list, ferr_list, idx_list = [], [], [], []
+                idx_spec += 1
+                t = Time(str(l), format='isot', scale='utc')
+                epoch = t.jd
+                
+                # Light time correction
+                ast = Horizons(location='568',id=433, epochs=epoch)
+                ast = ast.ephemerides()
+                au_m = au.to("m").value
+                lt_s = ast["delta"]*au_m/c
+                lt_day = lt_s / 3600./24.
+                epoch_ltcor = epoch - lt_day
+            else:
+                w, f, ferr, _ = l.split()
+                jd_list.append(float(epoch_ltcor))
+                w_list.append(float(w))
+                # mJy to Jy
+                f_list.append(float(f)*1e-3)
+                ferr_list.append(float(ferr)*1e-3)
+                idx_list.append(int(idx_spec))
+    
+                # Check whether the last line or not
+                # Last or     
+                if (idx_l == len(lines)-1) or (lines[idx_l + 1][0:4] == "1998"):
+                    df = pd.DataFrame(dict(jd=jd_list, wavelength=w_list, flux=f_list, fluxerr=ferr_list, n=idx_list))
+                    df_list.append(df)
+    df = pd.concat(df_list)
+    df["code"] = 568
+    df["cflag"] = 999
+    df["memo"] = "UKIRT1998"
+    return df
 
 
-def make_df_W08():
+def Eros_Lim2005_3(f):
+    """
+
+    Parameter
+    ---------
+    f : str
+        Spectra of Eros in Lim+2005 read by eye
+
+    Return
+    ------
+    df : pandas.DataFrame
+        dataframe
+    """
+    # (2002-09-21)
+    # (2002-09-22 A 1st)
+    # 2002-09-22 B 2nd
+    # TODO: There are two other spectra.
+
+    ## 2002-09-22 2nd spectrum
+    ## 6:16:23--6:46:28
+    ## 2452539.761377315--2452539.7822685186
+    epoch = (2452539.761377315 + 2452539.7822685186)/2.
+    
+    ## Lighttime correction
+    ast = Horizons(location='675',id=433, epochs=epoch)
+    ast = ast.ephemerides()
+    au_m = au.to("m").value
+    lt_s = ast["delta"]*au_m/c
+    lt_day = lt_s / 3600./24.
+    epoch_ltcor = epoch - lt_day
+    
+    w_list, f_list, ferr_list = [], [], []
+    with open(f, "r") as f:
+        lines = f.readlines()[2:]
+        for idx_l, l in enumerate(lines):
+            w, f, ferr = l.split()
+            w_list.append(float(w))
+            f_list.append(float(f))
+            ferr_list.append(float(ferr))
+    
+    df = pd.DataFrame(dict(wavelength=w_list, flux=f_list, fluxerr=ferr_list))
+    
+    df["jd"] = float(epoch_ltcor)
+    df["code"] = 675
+    df["cflag"] = 999
+    df["memo"] = "Lim2005_3"
+    return df
+
+
+def Eros_Wolters2008():
     """
     """
+    ## UKIRT/Michelle
+    ## Obs time = 2002-09-28 09:39–09:58
+    ## Central time 2002-09-28 09:50 = 2452545.909722222
+    ## Wavelength [micron], Flux density [10^-13 W/m^2/micron], its uncertainty [10^-13 W/m^2/micron]
+    w_list = [
+        8.120, 8.369, 8.625, 8.884, 9.159, 10.166, 10.476, 10.783, 11.088, 11.393, 11.700, 12.011, 12.329]
+    f_list = [
+        2.86,  2.99,  3.07, 3.17, 3.15, 3.22, 3.19, 3.12, 3.08, 3.06, 3.05, 2.99, 2.84]
+    ferr_list = [
+        0.032, 0.020, 0.022, 0.012, 0.013, 0.0097, 0.0089, 0.014, 0.012, 0.0066, 0.010, 0.011, 0.021]
+    df = pd.DataFrame(dict(wavelength=w_list, f=f_list, ferr=ferr_list))
+    
+    
+    # Constant to convert W/m^2/m to Jy (see note on iPad)
+    df["f"] *= 1e-13
+    df["ferr"] *= 1e-13
+    # x [W/m^2/m] = x*const*w**2 [Jy]
+    const = 1e20/c.value
+    # w, wavelength: micron
+    # c: m/s
+    df["flux"] = df["f"]*df["wavelength"]**2*const
+    df["fluxerr"] = df["ferr"]*df["wavelength"]**2*const
+    
+    ## Lighttime correction
+    epoch = 2452545.909722222
+    ast = Horizons(location='568',id=433, epochs=epoch)
+    
+    ast = ast.ephemerides()
+    au_m = au.to("m").value
+    lt_s = ast["delta"]*au_m/c
+    lt_day = lt_s / 3600./24.
+    epoch_ltcor = epoch - lt_day
+    
+    df["jd"] = float(epoch_ltcor)
+    df["code"] = 568
+    df["cflag"] = 999
+    df["memo"] = "UKIRT2002"
+    return df
 
 def remove_largevar(df, key, var_th):
     # Remove large variation
@@ -102,11 +261,8 @@ if __name__ == "__main__":
         "--fdir", type=str, default="../data",
         help="input file directory")
     parser.add_argument(
-        "--outdir", type=str, default="fig",
+        "--outdir", type=str, default="../data",
         help="output directory")
-    parser.add_argument(
-        "--outtype", default="pdf",
-        help="format of output figure")
     args = parser.parse_args()
 
 
@@ -115,24 +271,35 @@ if __name__ == "__main__":
         os.makedirs(outdir)
 
     # Read input files
+    # Columns used in the final output:
+    # jd wavelength flux fluxerr code cflag memo
+    col4out = ["jd", "wavelength", "flux", "fluxerr", "code", "cflag", "memo"]
 
     # 1. Harris+1999 ==========================================================
-    # N = 
+    # N = 303
     f_H99 = args.f_H99
-    #print(f" Original N={len(df_H99)} (H99)")
+    df_H99 = Eros_Harris1999(f_H99)
+    df_H99 = df_H99[col4out]
+    print(f" Original N={len(df_H99)} (H99)")
+    print(f"  Columns: {df_H99.columns.tolist()}")
     # 1. Harris+1999 ==========================================================
 
     # 2. Lim+2005 =============================================================
-    # N = 
-    f_L05 = args.f_L05
+    # N = 53
     # READ BY EYE
-    #print(f" Original N={len(df_L05)} (L05)")
+    f_L05 = args.f_L05
+    df_L05 = Eros_Lim2005_3(f_L05)
+    df_L05 = df_L05[col4out]
+    print(f" Original N={len(df_L05)} (L05)")
+    print(f"  Columns: {df_L05.columns.tolist()}")
     # 2. Lim+2005 =============================================================
 
     # 3. Wolters+2008 =========================================================
-    # N = 
-    #df_W08 = make_df_W08()
-    #print(f" Original N={len(df_W08)} (W08)")
+    # N = 13
+    df_W08 = Eros_Wolters2008()
+    df_W08 = df_W08[col4out]
+    print(f" Original N={len(df_W08)} (W08)")
+    print(f"  Columns: {df_W08.columns.tolist()}")
     # 3. Wolters+2008 =========================================================
 
     # 4. SST/IRS ==============================================================
@@ -141,7 +308,6 @@ if __name__ == "__main__":
     # # Note: The spectra are used in Vernazza+2010. The details are not written in the paper.
     # In Vernazza+2010: They used spectra obtained from 2004-09-30 00:52 to 01:01.
     # downloaded from https://pds-smallbodies.astro.umd.edu/data_other/sptz_02_INNER/a433.shtml#top
-    # All spectra were taken on 2004-09-30
 
     # ch0: 2 out of 12 spectra
     #   SPITZER_S0_4872960_0007_9_E7275841_tune.tbl
@@ -257,15 +423,13 @@ if __name__ == "__main__":
         df["memo"] = f"SSTch{ch}_{specidx_list[idx]}"
         df["code"] = "@sst"
     
-        # Columns:
-        # jd wavelength flux fluxerr code cflag memo
-        col4out = ["jd", "wavelength", "flux", "fluxerr", "code", "cflag", "memo"]
         df4out = df[col4out]
         df4out_list.append(df4out)
 
     # Merge 6 spectra
     df_S = pd.concat(df4out_list)
     print(f" Original N={len(df_S)} (SST)")
+    print(f"  Columns: {df_S.columns.tolist()}")
     # 4. SST/IRS ==============================================================
  
 
@@ -286,15 +450,15 @@ if __name__ == "__main__":
         lt_day = lt_s / 3600./24.
         jd_ltcor = jd - lt_day
         jd_ltcor_list.append(jd_ltcor)
-    df_A["jd"] = jd_ltcor_list
+    df_A.loc[:, "jd"] = jd_ltcor_list
+    print(f"  Columns: {df_A.columns.tolist()}")
     # 5. AKARI/IRC ============================================================
-
 
     # TODO: SNR cut here?
 
-
     # Make a single merged file
     df = pd.concat([df_H99, df_L05, df_W08, df_S, df_A])
-    print(df)
-
     # Save 
+    out = f"Eros_flux_N{len(df)}.txt"
+    out = os.path.join(args.outdir, out)
+    df.to_csv(out, sep=" ", index=False)
