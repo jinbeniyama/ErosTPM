@@ -7,9 +7,12 @@
 This is a repository for Eros TPM in prep.
 Figures are made in /plot.
 
-## data (in /data)
-* pre_akari.dat (AKARI observations downloaded from JAXA website)
+## Data (in /data)
 * Eros_UKIRT_June_1998_modified_by_JB.txt (provided by A. Harris)
+* erosLim-2002sept22_Jy.flx (thermal flux from Lim+2005, scanned from their Fig.)
+* SPITZER_S0_4872960_0007_9_E7275841_tune.tbl, SPITZER_S0_4872960_0010_9_E7275844_tune.tbl, SPITZER_S2_4872960_0012_9_E7275703_tune.tbl, SPITZER_S2_4872960_0013_9_E7275707_tune.tbl, SPITZER_S2_4872960_0014_9_E7275704_tune.tbl, SPITZER_S2_4872960_0015_9_E7275696_tune.tbl (SST/IRS spectra, downloaded from https://pds-smallbodies.astro.umd.edu/data_other/
+Spitzer.shtm)
+* pre_akari.dat (AKARI observations downloaded from JAXA website)
 * 433.obj (shape model of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, shape.obj)
 * 433_spin.txt (spin file of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, spin.txt)
 * 433_obs_N811.txt (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
