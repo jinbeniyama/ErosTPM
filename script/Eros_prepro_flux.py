@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Preprocesses of thermal fluxes of Eros.
+N = 811 (= 175+53+13+565+5)
 
 1. Eros in 1998 published in Harris+1999
    Q-band spectra are not used 
