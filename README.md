@@ -12,6 +12,7 @@ Figures are made in /plot.
 * 433_spin.txt (spin file of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, spin.txt)
 * 433_obs_20250110.txt (thermal observations formatted for TPM, read the paper for the details)
 * 433_eph_20250110.txt (ephemeris file paired with 433_obs.txt)
+* 433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat (observation files after preprocessing)
 
 ## Procedure
 Skip and go to "Plot figures" if you just make figures in the paper.
