@@ -67,6 +67,8 @@ def plot_spec_Eros(df, tel_list, out=None):
     ax = fig.add_axes([0.10, 0.12, 0.85, 0.85])
     ax.set_xlabel("Wavelength [micron]")
     ax.set_ylabel("Flux density [Jy]")
+    ax.set_xlim([5, 40])
+    ax.set_ylim([0, 16])
 
     # Labels already used
     lab_used = []
@@ -140,22 +142,12 @@ if __name__ == "__main__":
         os.makedirs(outdir)
 
     # Read all data
+    # Outliers (negative fluxes) rejections were already done in the preprocesses
     f = args.flux
     df = pd.read_csv(f, sep=" ")
     print(f" Original N={len(df)}")
 
-    # TODO: Check data selection
-    # Remove outliers
-    df = df[df["flux"] > 0]
-    print(f" Remove negative flux -> N={len(df)}")
-    # Remove low SNR
-    SNR_min = 5
-    df = df[df["flux"]/df["fluxerr"] > SNR_min]
-    print(f" Remove SNR < {SNR_min} -> N={len(df)}")
-    
-    
     # Plot fluxes
-
     tel_list = list(set(df.memo.values.tolist()))
     # Sort by year in ascending order
     tel_list = ["UKIRT1998", "UKIRT2002", "Lim2005_3", "SSTch2_3", "SSTch0_8", "SSTch0_11", "SSTch2_4", "SSTch2_1", "SSTch2_2", "akari"]
@@ -164,11 +156,5 @@ if __name__ == "__main__":
     out = os.path.join(args.outdir, out)
     plot_spec_Eros(df, tel_list, out)
 
-
-
-
-
     latex_tab = generate_latex_table(df)
     print(latex_tab)
-
-
