@@ -12,13 +12,21 @@ Figures are made in /plot.
 * Eros_UKIRT_June_1998_modified_by_JB.txt (provided by A. Harris)
 * 433.obj (shape model of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, shape.obj)
 * 433_spin.txt (spin file of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, spin.txt)
-* 433_obs_20250110.txt (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
-* 433_eph_20250110.txt (ephemeris file paired with 433_obs.txt, made by J.B.)
-* (433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat (observation files after preprocessing))
+* 433_obs_N811.txt (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
+* 433_eph_N811.txt (ephemeris file paired with 433_obs.txt, made by J.B.)
+* Eros_flux_N811.txt (observation files after preprocessing, which is made with Eros_prepro_flux.py)
 
-## Make obs and ephem files
-Figures are made in /data.
+## Preprocesses
+Execute folloing commands in /data to make obs file and ephemeris file for the TPM.
+``` 
+# Preprocess of thermal infrared fluxes.
+python ../script/Eros_prepro_flux.py ../data/Eros_UKIRT_June_1998_modified_by_JB.txt ../data/erosLim-2002sept22_Jy.flx ../data/pre_akari.dat
+``` 
+
+```
+# Make obs and ephemeris files
 make_obseph.py 433 Eros_flux_N811.txt --out_obs 433_obs_N811.txt --out_eph 433_eph_N811.txt
+```
 
 ## Procedure
 Skip and go to "Plot figures" if you just make figures in the paper.
@@ -48,12 +56,6 @@ Do all commands in /plot.
 # Location of Eros
 python ../script/Eros_fig_loc.py
 ```
-
-
-``` 
-python ../script/Eros_prepro_flux.py ../data/Eros_UKIRT_June_1998_modified_by_JB.txt ../data/erosLim-2002sept22_Jy.flx ../data/pre_akari.dat
-``` 
-
 
 ``` 
 # Thermal flux of Eros
