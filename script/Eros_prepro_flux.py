@@ -96,9 +96,6 @@ if __name__ == "__main__":
         "f_L05", type=str,
         help="Flux tables from Lim+2005.")
     parser.add_argument(
-        "f_W08", type=str,
-        help="Flux tables from Wolters+2008.")
-    parser.add_argument(
         "f_AKARI", type=str,
         help="Flux tables from JAXA website.")
     parser.add_argument(
@@ -134,7 +131,6 @@ if __name__ == "__main__":
 
     # 3. Wolters+2008 =========================================================
     # N = 
-    f_W08 = args.f_W08
     #df_W08 = make_df_W08()
     #print(f" Original N={len(df_W08)} (W08)")
     # 3. Wolters+2008 =========================================================
