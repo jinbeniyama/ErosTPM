@@ -14,10 +14,11 @@ Figures are made in /plot.
 * 433_eph_20250110.txt (ephemeris file paired with 433_obs.txt)
 
 ## Procedure
-Skip 1. and 2. if you just make figures in the paper.
+Skip and go to "Plot figures" if you just make figures in the paper.
 
 1. Do TPM with brute-force method
 ```
+bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_20250110.txt 433_eph_20250110.txt .
 bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_20250110.txt 433_eph_20250110.txt .
 ```
 
