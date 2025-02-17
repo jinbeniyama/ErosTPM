@@ -8,11 +8,17 @@ This is a repository for Eros TPM in prep.
 Figures are made in /plot.
 
 ## data (in /data)
+* pre_akari.dat (AKARI observations downloaded from JAXA website)
+* Eros_UKIRT_June_1998_modified_by_JB.txt (provided by A. Harris)
 * 433.obj (shape model of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, shape.obj)
 * 433_spin.txt (spin file of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, spin.txt)
-* 433_obs_20250110.txt (thermal observations formatted for TPM, read the paper for the details)
-* 433_eph_20250110.txt (ephemeris file paired with 433_obs.txt)
-* 433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat (observation files after preprocessing)
+* 433_obs_20250110.txt (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
+* 433_eph_20250110.txt (ephemeris file paired with 433_obs.txt, made by J.B.)
+* (433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat (observation files after preprocessing))
+
+## Make obs and ephem files
+Figures are made in /data.
+make_obseph.py 433 Eros_flux_N811.txt --out_obs 433_obs_N811.txt --out_eph 433_eph_N811.txt
 
 ## Procedure
 Skip and go to "Plot figures" if you just make figures in the paper.
@@ -20,7 +26,7 @@ Skip and go to "Plot figures" if you just make figures in the paper.
 1. Do TPM with brute-force method
 ```
 bash 1_ErosTPM.sh (obj file) (spin file) (obs file) (ephemeris file) (output directory)
-bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_20250110.txt 433_eph_20250110.txt TPMresult
+bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_N811.txt 433_eph_N811.txt TPMresult
 ```
 
 2. Make neural-network (NN) model to predict thermal flux
@@ -45,6 +51,11 @@ python ../script/Eros_fig_loc.py
 
 
 ``` 
+python ../script/Eros_prepro_flux.py ../data/Eros_UKIRT_June_1998_modified_by_JB.txt ../data/erosLim-2002sept22_Jy.flx ../data/pre_akari.dat
+``` 
+
+
+``` 
 # Thermal flux of Eros
-python ../script/Eros_fig_flux.py ../data/433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat
+python ../script/Eros_fig_flux.py ../data/Eros_flux_N811.txt
 ```
