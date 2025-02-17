@@ -4,6 +4,8 @@
 Preprocesses of thermal fluxes of Eros.
 
 1. Eros in 1998 published in Harris+1999
+   Q-band spectra are not used 
+   due to the relatively large uncertainty in the absolute calibration.
 2. Eros in 2002 sep. published in Wolters+2008
 3. Eros in 2002 sep. published in Lim+2005
 4. Eros in 2004 by SST
@@ -276,9 +278,11 @@ if __name__ == "__main__":
     col4out = ["jd", "wavelength", "flux", "fluxerr", "code", "cflag", "memo"]
 
     # 1. Harris+1999 ==========================================================
-    # N = 303 (incl. Q-band)
+    # N = 175 (FIY, N = 303 incl. Q-band)
     f_H99 = args.f_H99
     df_H99 = Eros_Harris1999(f_H99)
+    # Use only N-band
+    df_H99 = df_H99[df_H99["wavelength"] < 15]
     df_H99 = df_H99[col4out]
     print(f" Original N={len(df_H99)} (H99)")
     print(f"  Columns: {df_H99.columns.tolist()}")
