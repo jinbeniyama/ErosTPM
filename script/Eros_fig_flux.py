@@ -91,18 +91,18 @@ def plot_spec_Eros(df, tel_list, out=None):
 
 def generate_latex_table(df):
     latex_table = r"""
-\begin{longtable}{cccc}
+\begin{longtable}{ccccc}
 \centering
 \caption{Observed fluxes at different epochs and wavelengths.} \label{tab:flux} \\
 \hline\hline
-Epoch & Wavelength & Flux [Jy] & Flux error [Jy] \\
-(JD) & ($\mu$m) &  &  \\
+Epoch & Wavelength & Flux [Jy] & Flux error [Jy] & Reference\\
+(JD) & ($\mu$m) &  &  &\\
 \hline
 \endfirsthead
 
 \hline\hline
-Epoch & Wavelength & Flux [Jy] & Flux error [Jy] \\
-(JD) & ($\mu$m) &  &  \\
+Epoch & Wavelength & Flux [Jy] & Flux error [Jy] & Reference\\
+(JD) & ($\mu$m) &  &  & \\
 \hline
 \endhead
 
@@ -113,7 +113,7 @@ Epoch & Wavelength & Flux [Jy] & Flux error [Jy] \\
 """
 
     for _, row in df.iterrows():
-        latex_table += f"{row['jd']:.1f} & {row['wavelength']:.1f} & {row['flux']:.2f} & {row['fluxerr']:.2f} \\\\\n"
+        latex_table += f"{row['jd']:.1f} & {row['wavelength']:.1f} & {row['flux']:.2f} & {row['fluxerr']:.2f} & {row['ref']}\\\\\n"
 
     latex_table += r"""\hline
 \end{longtable}
@@ -151,6 +151,20 @@ if __name__ == "__main__":
     tel_list = list(set(df.memo.values.tolist()))
     # Sort by year in ascending order
     tel_list = ["UKIRT1998", "UKIRT2002", "Lim2005_3", "SSTch2_3", "SSTch0_8", "SSTch0_11", "SSTch2_4", "SSTch2_1", "SSTch2_2", "akari"]
+
+    # Make a reference column
+    df["ref"] = 0
+    df.loc[(df['memo'] == 'UKIRT1998'), 'ref'] = "Harris et al. (1999)"
+    df.loc[(df['memo'] == 'UKIRT2002'), 'ref'] = "Wolters et al. (2008)"
+    df.loc[(df['memo'] == 'Lim2005_3'), 'ref'] = "Lim et al. (2005)"
+    df.loc[(df['memo'] == 'SSTch0_8'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'SSTch0_11'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'SSTch2_1'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'SSTch2_2'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'SSTch2_3'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'SSTch2_4'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'akari'), 'ref'] = "AKARI/IRAC"
+
 
     out = "Eros_fig_flux.pdf"
     out = os.path.join(args.outdir, out)
