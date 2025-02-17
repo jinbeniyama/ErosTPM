@@ -36,5 +36,14 @@ bash 3_predictflux.sh
 
 ## Plot figures
 Do all commands in /plot.
+
+``` 
+# Location of Eros
+python ../script/Eros_fig_loc.py
 ```
+
+
+``` 
+# Thermal flux of Eros
+python ../script/Eros_fig_flux.py ../data/433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat
 ```
