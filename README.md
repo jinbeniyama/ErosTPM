@@ -18,7 +18,7 @@ Skip and go to "Plot figures" if you just make figures in the paper.
 
 1. Do TPM with brute-force method
 ```
-bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_20250110.txt 433_eph_20250110.txt .
+bash 1_ErosTPM.sh (obj file) (spin file) (obs file) (ephemeris file) (output directory)
 bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_20250110.txt 433_eph_20250110.txt .
 ```
 
