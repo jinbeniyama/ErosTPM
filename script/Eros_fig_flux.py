@@ -42,15 +42,15 @@ def tel2lab(tel):
     """
 
     if tel == "UKIRT1998":
-        lab = "1998 Jun. (Harris+1999)"
+        lab = "1998-06-27,28,29,30 (Harris+1999)\nN=175"
     elif tel == "UKIRT2002":
-        lab = "2002 Sep. (Wolters+2009)"
+        lab = "2002-09-28 (Wolters+2008)\nN=13"
     elif tel == "Lim2005_3":
-        lab = "2002 Sep. (Lim+2005)"
+        lab = "2002-09-21,22 (Lim+2005)\nN=53 (to be updated)"
     elif tel in ["SSTch0_8", "SSTch0_11", "SSTch2_1",  "SSTch2_2", "SSTch2_3", "SSTch2_4"]:
-        lab = "2004 Sep. (SST)"
+        lab = "2004-09-30 (SST)\nN=565"
     elif tel == "akari":
-        lab = "2007 Apr. (AKARI)"
+        lab = "2007-04-08(AKARI)\nN=5"
     else:
         lab = "label"
         
@@ -74,13 +74,13 @@ def plot_spec_Eros(df, tel_list, out=None):
     lab_used = []
     for tel in tel_list:
         df_tel = df[df["memo"] == tel]
+        N_tel = len(df_tel)
         col = tel2col(tel)
         lab = tel2lab(tel)
         if lab in lab_used:
             lab = None
         else:
             lab_used.append(lab)
-            
         ax.errorbar(df_tel["wavelength"], df_tel["flux"],  df_tel["fluxerr"], marker="o", ls="None", ms=5, color=col, label=lab)
 
     ax.legend()
