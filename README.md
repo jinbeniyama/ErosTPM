@@ -49,9 +49,11 @@ bash 2_makeNNmodel.sh TPMresult
 
 3. Predict thermal fluxes with the NN model
 ```
-bash 3_predictflux.sh (directory with output files of 2.)
-bash 3_predictflux.sh 
+bash 3_predictflux.sh (NN model made in process 2.)
+bash 3_predictflux.sh NNmodel
 ```
+The output files are .npy such as `LUT_2450991.767627034.npy`.
+
 
 ## Plot figures
 Do all commands in /plot.
