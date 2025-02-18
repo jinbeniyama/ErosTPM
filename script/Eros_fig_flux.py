@@ -68,7 +68,7 @@ def plot_spec_Eros(df, tel_list, out=None):
     ax.set_xlabel("Wavelength [micron]")
     ax.set_ylabel("Flux density [Jy]")
     ax.set_xlim([5, 40])
-    ax.set_ylim([0, 16])
+    ax.set_ylim([0, 15])
 
     # Labels already used
     lab_used = []
