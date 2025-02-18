@@ -5,13 +5,15 @@
 
 ## Overview
 This is a repository for Eros TPM in prep.
-Figures are made in /plot.
+Figures are made in `./plot`.
 
 ## Data (in /data)
-* Eros_UKIRT_June_1998_modified_by_JB.txt (provided by A. Harris)
-* erosLim-2002sept22_Jy.flx (thermal flux from Lim+2005, scanned from their Fig.)
-* SPITZER_S0_4872960_0007_9_E7275841_tune.tbl, SPITZER_S0_4872960_0010_9_E7275844_tune.tbl, SPITZER_S2_4872960_0012_9_E7275703_tune.tbl, SPITZER_S2_4872960_0013_9_E7275707_tune.tbl, SPITZER_S2_4872960_0014_9_E7275704_tune.tbl, SPITZER_S2_4872960_0015_9_E7275696_tune.tbl (SST/IRS spectra, downloaded from https://pds-smallbodies.astro.umd.edu/data_other/
-Spitzer.shtm)
+* `Eros_UKIRT_June_1998_modified_by_JB.txt` (provided by A. Harris)
+* `erosLim-2002sept22_Jy.flx` (thermal flux from Lim+2005, scanned from their Fig.)
+* `SPITZER_S0_4872960_0007_9_E7275841_tune.tbl`, `SPITZER_S0_4872960_0010_9_E7275844_tune.tbl`,
+  `SPITZER_S2_4872960_0012_9_E7275703_tune.tbl`, `SPITZER_S2_4872960_0013_9_E7275707_tune.tbl`,
+  `SPITZER_S2_4872960_0014_9_E7275704_tune.tbl`, `SPITZER_S2_4872960_0015_9_E7275696_tune.tbl`
+  (SST/IRS spectra, downloaded from `https://pds-smallbodies.astro.umd.edu/data_other/Spitzer.shtm`)
 * pre_akari.dat (AKARI observations downloaded from https://darts.isas.jaxa.jp/astro/akari/data/
 AKARI-IRC_Catalogue_AllSky_ASTFLUX_1.0.html)
 * 433.obj (shape model of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, shape.obj)
@@ -21,7 +23,7 @@ AKARI-IRC_Catalogue_AllSky_ASTFLUX_1.0.html)
 * Eros_flux_N811.txt (observation files after preprocessing, which is made with Eros_prepro_flux.py)
 
 ## Preprocesses
-Execute folloing commands in /data to make obs file and ephemeris file for the TPM.
+Execute folloing commands in `./data` to make obs file and ephemeris file for the TPM.
 ``` 
 # Preprocess of thermal infrared fluxes.
 python ../script/Eros_prepro_flux.py ../data/Eros_UKIRT_June_1998_modified_by_JB.txt ../data/erosLim-2002sept22_Jy.flx ../data/pre_akari.dat
