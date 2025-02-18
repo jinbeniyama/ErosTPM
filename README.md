@@ -14,13 +14,12 @@ Figures are made in `./plot`.
   `SPITZER_S2_4872960_0012_9_E7275703_tune.tbl`, `SPITZER_S2_4872960_0013_9_E7275707_tune.tbl`,
   `SPITZER_S2_4872960_0014_9_E7275704_tune.tbl`, `SPITZER_S2_4872960_0015_9_E7275696_tune.tbl`
   (SST/IRS spectra, downloaded from `https://pds-smallbodies.astro.umd.edu/data_other/Spitzer.shtm`)
-* pre_akari.dat (AKARI observations downloaded from https://darts.isas.jaxa.jp/astro/akari/data/
-AKARI-IRC_Catalogue_AllSky_ASTFLUX_1.0.html)
-* 433.obj (shape model of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, shape.obj)
-* 433_spin.txt (spin file of Eros, downloaded from DAMIT, https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083, spin.txt)
-* 433_obs_N811.txt (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
-* 433_eph_N811.txt (ephemeris file paired with 433_obs.txt, made by J.B.)
-* Eros_flux_N811.txt (observation files after preprocessing, which is made with Eros_prepro_flux.py)
+* `pre_akari.dat` (AKARI observations downloaded from `https://darts.isas.jaxa.jp/astro/akari/data/AKARI-IRC_Catalogue_AllSky_ASTFLUX_1.0.html`)
+* `433.obj` (shape model of Eros, downloaded from DAMIT, `https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083`, shape.obj)
+* `433_spin.txt` (spin file of Eros, downloaded from DAMIT, `https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083`, spin.txt)
+* `433_obs_N811.txt` (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
+* `433_eph_N811.txt` (ephemeris file paired with 433_obs.txt, made by J.B.)
+* `Eros_flux_N811.txt` (observation files after preprocessing, which is made with `Eros_prepro_flux.py`)
 
 ## Preprocesses
 Execute folloing commands in `./data` to make obs file and ephemeris file for the TPM.
@@ -54,11 +53,11 @@ bash 2_makeNNmodel.sh TPMresult
 bash 3_predictflux.sh (NN model made in process 2.)
 bash 3_predictflux.sh NNmodel
 ```
-The output files are .npy such as `LUT_2450991.767627034.npy`.
+The output files are in the format `.npy` such as `LUT_2450991.767627034.npy`.
 
 
 ## Plot figures
-Do all commands in /plot.
+Do all commands in `/plot`.
 
 ``` 
 # Location of Eros
