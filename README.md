@@ -67,5 +67,9 @@ python ../script/Eros_fig_loc.py
 
 ``` 
 # Thermal flux of Eros
-python ../script/Eros_fig_flux.py ../data/Eros_flux_N811.txt
+python ../script/Eros_fig_flux.py ../data/Eros_flux_N998.txt
 ```
+
+## Dependencies
+This repository is depending on `Python`, `NumPy`, `pandas`, `SciPy`, `Astropy`, `Astroquery`.
+The tpm code is downloaded from `https://www.oca.eu/images/LAGRANGE/pages_perso/delbo/thermops.tar.gz`.
