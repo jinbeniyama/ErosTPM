@@ -124,7 +124,7 @@ if __name__ == "__main__":
     parser = ap(
         description="Plot location of Eros.")
     parser.add_argument(
-        "--outdir", type=str, default="fig",
+        "--outdir", type=str, default=".",
         help="output directory")
     parser.add_argument(
         "--outtype", default="pdf",
