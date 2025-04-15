@@ -43,13 +43,13 @@ bash 1_ErosTPM.sh (obj file) (spin file) (obs file) (ephemeris file) (output dir
 bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_N811.txt 433_eph_N811.txt TPMresult
 ```
 
-2. Make neural-network (NN) model to predict thermal flux
+2. **Make neural-network (NN) model to predict thermal flux**
 ```
 bash 2_makeNNmodel.sh (directory with output files of 1.)
 bash 2_makeNNmodel.sh TPMresult
 ```
 
-3. Predict thermal fluxes with the NN model
+3. **Predict thermal fluxes with the NN model**
 ```
 bash 3_predictflux.sh (NN model made in process 2.)
 bash 3_predictflux.sh NNmodel
@@ -60,15 +60,16 @@ The output files are in the format `.npy` such as `LUT_2450991.767627034.npy`.
 ## Plot figures
 Do all commands in `/plot`.
 
+- Location of Eros (Figure X.)
 ``` 
-# Location of Eros
 python ../script/Eros_fig_loc.py
 ```
 
+- Thermal flux of Eros (Figure X.)
 ``` 
-# Thermal flux of Eros
 python ../script/Eros_fig_flux.py ../data/Eros_flux_N998.txt
 ```
+
 
 ## Dependencies
 This repository is depending on `Python`, `NumPy`, `pandas`, `SciPy`, `Astropy`, `Astroquery`.
