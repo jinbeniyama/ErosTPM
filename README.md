@@ -70,6 +70,10 @@ python ../script/Eros_fig_loc.py
 python ../script/Eros_fig_flux.py ../data/Eros_flux_N998.txt
 ```
 
+- Field of view at the time of SST observations (Figure X., in prep.)
+```
+python ../script/Eros_fig_SSTFoV.py ../data/433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat
+``` 
 
 ## Dependencies
 This repository is depending on `Python`, `NumPy`, `pandas`, `SciPy`, `Astropy`, `Astroquery`.
