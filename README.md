@@ -76,5 +76,5 @@ python ../script/Eros_fig_SSTFoV.py ../data/433_akari_ukirt1998_ukirt2002_lim200
 ``` 
 
 ## Dependencies
-This repository is depending on `Python`, `NumPy`, `pandas`, `SciPy`, `Astropy`, `Astroquery`.
+This repository is depending on `Python`, `NumPy`, `pandas`, `SciPy`, `Astropy`, `Astroquery`, `TREM`.
 The tpm code is downloaded from `https://www.oca.eu/images/LAGRANGE/pages_perso/delbo/thermops.tar.gz`.
