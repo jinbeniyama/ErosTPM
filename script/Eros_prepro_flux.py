@@ -2,15 +2,21 @@
 # -*- coding: utf-8 -*-
 """
 Preprocesses of thermal fluxes of Eros.
+(In prep.)
 N = 811 (= 175+53+13+565+5)
 
 1. Eros in 1998 published in Harris+1999
    Q-band spectra are not used 
    due to the relatively large uncertainty in the absolute calibration.
-2. Eros in 2002 sep. published in Wolters+2008
-3. Eros in 2002 sep. published in Lim+2005
-4. Eros in 2004 by SST
-5. Eros in 2007 by AKARI
+2. Eros in 2002 Sep. published in Wolters+2008
+3. Eros in 2002 Sep. published in Lim+2005
+4. Eros in 2004 Sep. by SST
+5. Eros in 2007 Apr. by AKARI (Usui+2011)
+
+Note
+----
+- Spitzer/IRAC photometry (at 3.6 & 4.5 micron, Trilling+2010, Mueller+2011) 
+  was not used in the project. 
 """
 import os 
 from argparse import ArgumentParser as ap
