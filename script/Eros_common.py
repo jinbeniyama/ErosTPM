@@ -280,6 +280,10 @@ def Eros_Lim2005_3(f):
             ferr_list.append(float(ferr))
     
     df = pd.DataFrame(dict(wavelength=w_list, flux=f_list, fluxerr=ferr_list))
+
+    # Just to check the consistency with Figure in the paper
+    #df["flux_W"] = df["flux"]/1e19/(df["wavelength"]*1e-6)**2*c.value
+    #df["fluxerr_W"] = df["fluxerr"]/1e19/(df["wavelength"]*1e-6)**2*c.value
     
     df["jd"] = float(epoch_ltcor)
     df["code"] = 675
