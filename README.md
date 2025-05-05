@@ -70,6 +70,16 @@ python ../script/Eros_fig_loc.py
 python ../script/Eros_fig_flux.py ../data/Eros_flux_N998.txt
 ```
 
+- Single-component fit, TI vs. chi-squared (Figure X., in prep.)
+```
+plot_tpm_brute.py ../TPMresult/tpmout* -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out Eros_fig_chi2single.pdf
+```
+
+- Dual-component fit, TI vs. chi-squared (Figure X., in prep.)
+```
+plot_tpm_brute_NN.py NN_TPMres.txt --fixscale --reduce --logx --logy --N_param 2 --out Eros_fig_chi2single_NN.pdf
+```
+
 - Field of view at the time of SST observations (Figure X., in prep.)
 ```
 python ../script/Eros_fig_SSTFoV.py ../data/433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat
