@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Preprocesses of thermal fluxes of Eros.
-(In prep.)
-N = 811 (= 175+53+13+565+5)
+"""Preprocesses of thermal fluxes of Eros.
+
+N = 998 (= 175+13+53+752+5)
 
 1. Eros in 1998 published in Harris+1999
    Q-band spectra are not used 
@@ -15,6 +14,8 @@ N = 811 (= 175+53+13+565+5)
 
 Note
 ----
+- The time in the output files is light-time corrected.
+- Q-band spectroscopy in Harris+1999 is not used in the project.
 - Spitzer/IRAC photometry (at 3.6 & 4.5 micron, Trilling+2010, Mueller+2011) 
   was not used in the project. 
 """
@@ -22,6 +23,7 @@ import os
 from argparse import ArgumentParser as ap
 import pandas as pd
 from astroquery.jplhorizons import Horizons
+from astropy.constants import c, au
 
 from Eros_common import (
     Eros_Harris1999, Eros_Lim2005_3, Eros_Wolters2008, remove_largevar, 
@@ -89,7 +91,7 @@ if __name__ == "__main__":
 
     # 4. SST/IRS ==============================================================
     # TODO: Check
-    # N = 565
+    # N = 752
     # # Note: The spectra are used in Vernazza+2010. The details are not written in the paper.
     # In Vernazza+2010: They used spectra obtained from 2004-09-30 00:52 to 01:01.
     # downloaded from https://pds-smallbodies.astro.umd.edu/data_other/sptz_02_INNER/a433.shtml#top
@@ -171,7 +173,7 @@ if __name__ == "__main__":
     # EXPTOT_T: w/deadtime?
     #   14.68 s
     
-    # TODO: hyper parameters
+    # TODO: hyper parameters to remove outliers
     # Relative error
     err_th = 0.05
     # Variation (25%)
@@ -225,8 +227,10 @@ if __name__ == "__main__":
     print(f" Original N={len(df_A)} (AKARI)")
     # Do light-time correction
     jd_ltcor_list = []
-    for jd in [2454199.2663881136, 2454199.404411632, 2454199.818465822, 2454199.8874780326, 2454199.9564906135]:
-        ast = Horizons(location='500',id=433, epochs=jd)
+    for jd in [2454199.2663881136, 2454199.404411632, 2454199.818465822, 
+               2454199.8874780326, 2454199.9564906135]:
+        # Use code 500
+        ast = Horizons(location='*@body',id=433, epochs=jd)
         ast = ast.ephemerides()
         au_m = au.to("m").value
         lt_s = ast["delta"]*au_m/c
