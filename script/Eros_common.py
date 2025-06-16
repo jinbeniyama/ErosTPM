@@ -306,6 +306,8 @@ def Eros_Wolters2008():
     ferr_list = [
         0.032, 0.020, 0.022, 0.012, 0.013, 0.0097, 0.0089, 0.014, 0.012, 0.0066, 0.010, 0.011, 0.021]
     df = pd.DataFrame(dict(wavelength=w_list, f=f_list, ferr=ferr_list))
+
+    # Add error
     
     
     # Constant to convert W/m^2/m to Jy (see note on iPad)
