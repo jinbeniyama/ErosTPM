@@ -81,6 +81,7 @@ do
     echo ""
     # Start TPM!
         echo ${fOBJ} ${fEPH} ${EPS} ${TI} ${BondA} ${CA} ${CR} | runtpm -f -S ${fSPIN} -o ${fOBS} -p ${NPHASE} > ${OUTDIR}/tpmout_${OBJ}_brute_ti${TI}_ca${CA}_cr${CR}.dat &
+        #echo ${fOBJ} ${fEPH} ${EPS} ${TI} ${BondA} ${CA} ${CR} | runtpm -S ${fSPIN} -o ${fOBS} -p ${NPHASE} > ${OUTDIR}/tpmout_${OBJ}_brute_ti${TI}_ca${CA}_cr${CR}.dat &
     done
 	# Wait until all 10 processes are finished
 	wait
