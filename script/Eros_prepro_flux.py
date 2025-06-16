@@ -230,7 +230,7 @@ if __name__ == "__main__":
     for jd in [2454199.2663881136, 2454199.404411632, 2454199.818465822, 
                2454199.8874780326, 2454199.9564906135]:
         # Use code 500
-        ast = Horizons(location='*@body',id=433, epochs=jd)
+        ast = Horizons(location='500',id=433, epochs=jd)
         ast = ast.ephemerides()
         au_m = au.to("m").value
         lt_s = ast["delta"]*au_m/c
