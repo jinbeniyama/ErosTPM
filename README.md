@@ -25,13 +25,14 @@ Figures are made in `./plot`.
 
 ## Preprocesses
 Execute folloing commands in `./data` to make obs file and ephemeris file for the TPM.
+
+- Preprocess of thermal infrared fluxes.
 ``` 
-# Preprocess of thermal infrared fluxes.
 python ../script/Eros_prepro_flux.py ../data/Eros_UKIRT_June_1998_modified_by_JB.txt ../data/erosLim-2002sept22_Jy.flx ../data/pre_akari.dat
 ``` 
 
+- Make obs and ephemeris files
 ```
-# Make obs and ephemeris files
 make_obseph.py 433 Eros_flux_N998.txt --out_obs 433_obs_N998.txt --out_eph 433_eph_N998.txt
 ```
 
@@ -40,8 +41,9 @@ Skip and go to "Plot figures" if you just make figures in the paper.
 
 1. Do TPM with brute-force method
 ```
-bash 1_ErosTPM.sh (obj file) (spin file) (obs file) (ephemeris file) (output directory)
-bash 1_ErosTPM.sh 433.obj 433_spin.txt 433_obs_N998.txt 433_eph_N998.txt TPMresult
+bash 1_ErosTPM.sh ../433.obj ../433_spin.txt 433_obs_N998.txt 433_eph_N998.txt TPMresult_20250508_LagerrosApp
+# Make look up table.
+python script/make_lut.py TPMresult_20250508_LagerrosApp --out data/lut_20250508.txt
 ```
 
 2. **Make neural-network (NN) model to predict thermal flux**
@@ -73,7 +75,11 @@ python ../script/Eros_fig_flux.py ../data/Eros_flux_N998.txt
 
 - Single-component fit, TI vs. chi-squared (Figure X., in prep.)
 ```
-plot_tpm_brute.py ../TPMresult/tpmout* -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out Eros_fig_chi2single.pdf
+plot_tpm_brute.py ../TPMresult_2025Jan/tpmout* -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out chi2_single_2025Jan.pdf
+plot_tpm_brute.py ../TPMresult/tpmout* -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out chi2_single_wo_Laggerros_app.pdf
+plot_tpm_brute.py ../TPMresult_Lagerros_app/tpmout_433_brute_ti*  -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out chi2_single_w_Laggerros_app.pdf
+
+plot_tpm_brute.py ../TPMresult_Lagerros_app/tpmout_433_brute_ti*  -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out chi2_single_w_Laggerros_app.pdf
 ```
 
 - Dual-component fit, TI vs. chi-squared (Figure X., in prep.)
