@@ -43,14 +43,14 @@ Skip and go to "Plot figures" if you just make figures in the paper.
 ```
 bash 1_ErosTPM.sh ../433.obj ../433_spin.txt 433_obs_N998.txt 433_eph_N998.txt TPMresult_20250508_LagerrosApp
 # Make look up table.
-python script/make_lut.py TPMresult_20250508_LagerrosApp --out data/lut_20250508.txt
+make_lut.py TPMresult_20250508_LagerrosApp --out data/lut_20250508.txt
 ```
 
 2. **Make neural-network (NN) model to predict thermal flux**
 ```
-bash 2_makeNNmodel.sh (directory with output files of 1.)
-bash 2_makeNNmodel.sh TPMresult
+DemoNN.ipynb
 ```
+The results are saved in `saved_model`.
 
 3. **Predict thermal fluxes with the NN model**
 ```
