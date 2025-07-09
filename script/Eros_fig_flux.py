@@ -64,6 +64,14 @@ if __name__ == "__main__":
     df.loc[(df['memo'] == 'SSTch2_4'), 'ref'] = "SST/IRS"
     df.loc[(df['memo'] == 'akari'), 'ref'] = "AKARI/IRC"
 
+    # ad hoc
+    N0 = len(df)
+    df = df[df["memo"] != "SSTch0_2"]
+    df = df[df["memo"] != "SSTch0_5"]
+    df = df[df["memo"] != "SSTch0_8"]
+    df = df[df["memo"] != "SSTch0_11"]
+    N1 = len(df)
+    print(f"  N={N0-N1} are removed (ch0 of SST)")
 
     out = "Eros_fig_flux.pdf"
     out = os.path.join(args.outdir, out)
