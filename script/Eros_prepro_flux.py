@@ -43,10 +43,10 @@ if __name__ == "__main__":
         "f_AKARI", type=str,
         help="Flux tables from JAXA website.")
     parser.add_argument(
-        "--fdir", type=str, default="../data",
+        "--fdir", type=str, default="data",
         help="input file directory")
     parser.add_argument(
-        "--outdir", type=str, default="../data",
+        "--outdir", type=str, default="data",
         help="output directory")
     args = parser.parse_args()
 
@@ -97,29 +97,31 @@ if __name__ == "__main__":
     # downloaded from https://pds-smallbodies.astro.umd.edu/data_other/sptz_02_INNER/a433.shtml#top
 
     # ch0: 4 out of 12 spectra
+    #      -> Not use! (To be updated)
     # ch2: all 4 spectra
     f_dir = args.fdir
     f_list = [
-        "SPITZER_S0_4872960_0001_9_E7275827_tune.tbl",
-        "SPITZER_S0_4872960_0004_9_E7275831_tune.tbl",
-        "SPITZER_S0_4872960_0007_9_E7275841_tune.tbl",
-        "SPITZER_S0_4872960_0010_9_E7275844_tune.tbl",
+        #"SPITZER_S0_4872960_0001_9_E7275827_tune.tbl",
+        #"SPITZER_S0_4872960_0004_9_E7275831_tune.tbl",
+        #"SPITZER_S0_4872960_0007_9_E7275841_tune.tbl",
+        #"SPITZER_S0_4872960_0010_9_E7275844_tune.tbl",
         "SPITZER_S2_4872960_0012_9_E7275703_tune.tbl", 
         "SPITZER_S2_4872960_0013_9_E7275707_tune.tbl",
         "SPITZER_S2_4872960_0014_9_E7275704_tune.tbl",
         "SPITZER_S2_4872960_0015_9_E7275696_tune.tbl",
     ]
     utc_list = [
-        "2004-09-30T00:52:43.624",
-        "2004-09-30T00:54:32.420",
-        "2004-09-30T00:56:14.834",
-        "2004-09-30T00:57:36.623",
+        #"2004-09-30T00:52:43.624",
+        #"2004-09-30T00:54:32.420",
+        #"2004-09-30T00:56:14.834",
+        #"2004-09-30T00:57:36.623",
         "2004-09-30T00:58:58.419", 
         "2004-09-30T00:59:27.618",
         "2004-09-30T01:00:00.021",
         "2004-09-30T01:00:29.216",
     ]
-    specidx_list = [2, 5, 8, 11, 1, 2, 3, 4]
+    #specidx_list = [2, 5, 8, 11, 1, 2, 3, 4]
+    specidx_list = [1, 2, 3, 4]
 
     key_skip = ["\\processing", "\\wavsamp", "\\char", "\\character", "\\COMMENT", "\\HISTORY", "\\int", "\\float"]
     df_list = []
@@ -201,10 +203,10 @@ if __name__ == "__main__":
     
         df["jd"] = jd_ltcor
         df["cflag"] = 999
-        if idx < 4:
-            ch = 0
-        else:
-            ch = 2
+        #if idx < 4:
+        #    ch = 0
+        #else:
+        ch = 2
         df["memo"] = f"SSTch{ch}_{specidx_list[idx]}"
         df["code"] = "@sst"
     
