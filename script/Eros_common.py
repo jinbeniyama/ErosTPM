@@ -414,32 +414,29 @@ def remove_edge(df, n):
     return df
 
 
-def SST_ltcor(target, utc):
+def SST_ltcor(target, jd):
     """Light-time correction for SST data.
 
     Parameters
     ----------
     target : str
         target name
-    utc : str
-        utc
+    jd : str
+        julian day
 
     Return
     ------
-    epoch_ltcor : float 
+    jd_ltcor : float 
         light-time corrected time in jd
     """
-    epoch = Time(str(utc), format='isot', scale='utc')
-    epoch = epoch.jd
-
     ## Lighttime correction
-    ast = Horizons(location='@sst',id=target, epochs=epoch)
+    ast = Horizons(location='@sst',id=target, epochs=jd)
     ast = ast.ephemerides()
     au_m = au.to("m").value
     lt_s = ast["delta"]*au_m/c
     lt_day = lt_s / 3600./24.
-    epoch_ltcor = epoch - lt_day
-    print(f"  epoch_jd       : {epoch}")
-    print(f"  epoch_jd_ltcor : {epoch_ltcor.value[0]}")
-    epoch_ltcor = epoch_ltcor.value[0]
-    return epoch_ltcor
+    jd_ltcor = jd - lt_day
+    print(f"  epoch_jd       : {jd}")
+    print(f"  epoch_jd_ltcor : {jd_ltcor.value[0]}")
+    jd_ltcor = jd_ltcor.value[0]
+    return jd_ltcor
