@@ -55,9 +55,9 @@ def make_ave_SST(df1, df2):
     # Final wavelength grids
     w12 = sorted(set(w1 + w2))
 
-    print(f"wavelength 1 N = {len(w1)}")
-    print(f"wavelength 2 N = {len(w2)}")
-    print(f"-> combined grid N = {len(w12)}")
+    print(f"    Wavelength1  N = {len(w1)}")
+    print(f"    Wavelength2  N = {len(w2)}")
+    print(f"    -> combined  N = {len(w12)}\n")
 
     # Set wavelength as index
     df1_ = df1.set_index("wavelength")
@@ -138,8 +138,8 @@ if __name__ == "__main__":
     # Use only N-band
     df_H99 = df_H99[df_H99["wavelength"] < 15]
     df_H99 = df_H99[col4out]
-    print(f" Original N={len(df_H99)} (H99)")
-    print(f"  Columns: {df_H99.columns.tolist()}")
+    print(f"Original N={len(df_H99)} (H99)")
+    print(f"    Columns: {df_H99.columns.tolist()}\n")
     # 1. Harris+1999 ==========================================================
 
     # 2. Lim+2005 =============================================================
@@ -148,21 +148,20 @@ if __name__ == "__main__":
     f_L05 = args.f_L05
     df_L05 = Eros_Lim2005_3(f_L05)
     df_L05 = df_L05[col4out]
-    print(f" Original N={len(df_L05)} (L05)")
-    print(f"  Columns: {df_L05.columns.tolist()}")
+    print(f"Original N={len(df_L05)} (L05)")
+    print(f"    Columns: {df_L05.columns.tolist()}\n")
     # 2. Lim+2005 =============================================================
 
     # 3. Wolters+2008 =========================================================
     # N = 13
     df_W08 = Eros_Wolters2008()
     df_W08 = df_W08[col4out]
-    print(f" Original N={len(df_W08)} (W08)")
-    print(f"  Columns: {df_W08.columns.tolist()}")
+    print(f"Original N={len(df_W08)} (W08)")
+    print(f"    Columns: {df_W08.columns.tolist()}\n")
     # 3. Wolters+2008 =========================================================
 
     # 4. SST/IRS ==============================================================
-    # TODO: Check
-    # N = 752
+    # N = 426
     # # Note: The spectra are used in Vernazza+2010. The details are not written in the paper.
     # In Vernazza+2010: They used spectra obtained from 2004-09-30 00:52 to 01:01.
     # downloaded from https://pds-smallbodies.astro.umd.edu/data_other/sptz_02_INNER/a433.shtml#top
@@ -182,8 +181,6 @@ if __name__ == "__main__":
         "2004-09-30T01:00:00.021",
         "2004-09-30T01:00:29.216",
     ]
-    specidx_list = [1, 2, 3, 4]
-    
     # Not used
     key_skip = [
         "\\processing", "\\wavsamp", "\\char", "\\character", 
@@ -236,11 +233,11 @@ if __name__ == "__main__":
     df_SST3 = df_list[2]
     df_SST4 = df_list[3]
 
-    print("SST data size (original)")
-    print(f"  N1 = {len(df_SST1)}")
-    print(f"  N2 = {len(df_SST2)}")
-    print(f"  N3 = {len(df_SST3)}")
-    print(f"  N4 = {len(df_SST4)}")
+    print("Original (SST, four spectra)")
+    print(f"    N1 = {len(df_SST1)}")
+    print(f"    N2 = {len(df_SST2)}")
+    print(f"    N3 = {len(df_SST3)}")
+    print(f"    N4 = {len(df_SST4)}\n")
 
     # Remove data with flag
     df_SST1 = df_SST1[df_SST1["bit-flag"] == "0"]
@@ -252,11 +249,11 @@ if __name__ == "__main__":
     df_SST4 = df_SST4[df_SST4["bit-flag"] == "0"]
     df_SST4 = df_SST4.astype(float)
 
-    print("SST data size (after removal with flag )")
-    print(f"  N1 = {len(df_SST1)}")
-    print(f"  N2 = {len(df_SST2)}")
-    print(f"  N3 = {len(df_SST3)}")
-    print(f"  N4 = {len(df_SST4)}")
+    print("After removal with flag ")
+    print(f"    N1 = {len(df_SST1)}")
+    print(f"    N2 = {len(df_SST2)}")
+    print(f"    N3 = {len(df_SST3)}")
+    print(f"    N4 = {len(df_SST4)}\n")
 
 
     # # Do light-time correction, save results, and plot
@@ -274,7 +271,6 @@ if __name__ == "__main__":
     var_th = 0.25
     
     key_w, key_flux, key_fluxerr = "wavelength", "flux_density", "error"
-
     df_list_cor = []
     for idx, df in enumerate(df_list):
         
@@ -300,7 +296,7 @@ if __name__ == "__main__":
     df_S_12 = make_ave_SST(df_SST1, df_SST2)
     df_S_34 = make_ave_SST(df_SST3, df_SST4)
     print(f" Merged N={len(df_S_12)} (SST 14--20 micron)")
-    print(f" Merged N={len(df_S_34)} (SST 20--39 micron)")
+    print(f" Merged N={len(df_S_34)} (SST 20--39 micron)\n")
 
     # Mean utc1 and utc2
     utc1 = utc_list[0]
@@ -334,7 +330,7 @@ if __name__ == "__main__":
     # Color-term corrected (thus we put -9 and -8 as flags)
     f_AKARI = args.f_AKARI
     df_A = pd.read_csv(f_AKARI, sep=" ")
-    print(f" Original N={len(df_A)} (AKARI)")
+    print(f"Original N={len(df_A)} (AKARI)")
     # Do light-time correction
     jd_ltcor_list = []
     for jd in [2454199.2663881136, 2454199.404411632, 2454199.818465822, 
@@ -348,7 +344,7 @@ if __name__ == "__main__":
         jd_ltcor = jd - lt_day
         jd_ltcor_list.append(jd_ltcor)
     df_A.loc[:, "jd"] = jd_ltcor_list
-    print(f"  Columns: {df_A.columns.tolist()}")
+    print(f"    Columns: {df_A.columns.tolist()}\n")
     # 5. AKARI/IRC ============================================================
 
     # Make a single merged file
@@ -357,4 +353,6 @@ if __name__ == "__main__":
     out = f"Eros_flux_N{len(df)}.txt"
     out = os.path.join(args.outdir, out)
     df.to_csv(out, sep=" ", index=False)
-
+    
+    N_total = len(df)
+    print(f"Total number of obs. N={N_total}")
