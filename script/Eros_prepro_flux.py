@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Preprocesses of thermal fluxes of Eros.
 
-N = 998 (= 175+13+53+752+5)
+N = 426 (= 175+13+53+180+5)
 
 1. Eros in 1998 published in Harris+1999
    Q-band spectra are not used 
@@ -30,12 +30,6 @@ from Eros_common import (
     Eros_Harris1999, Eros_Lim2005_3, Eros_Wolters2008, remove_largevar, 
     remove_edge, SST_ltcor)
 
-
-# Calculate average of the two SST spectra
-# 2025-07-30
-import numpy as np
-import pandas as pd
-from scipy.interpolate import interp1d
 
 def make_ave_SST(df1, df2):
     """Make avareged spectrum for SST (of Eros).
@@ -355,7 +349,6 @@ if __name__ == "__main__":
     df_A.loc[:, "jd"] = jd_ltcor_list
     print(f"  Columns: {df_A.columns.tolist()}")
     # 5. AKARI/IRC ============================================================
-
 
     # Make a single merged file
     df = pd.concat([df_H99, df_L05, df_W08, df_S_12, df_S_34, df_A])
