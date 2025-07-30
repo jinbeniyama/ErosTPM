@@ -366,8 +366,8 @@ def remove_largevar(df, key, var_th):
             valmin = val0*(1 - var_th)
             valmax = val0*(1 + var_th)
             idx_list.append(idx)
-            print(valmin)
-            print(valmax)
+            #print(valmin)
+            #print(valmax)
         else:
             val = row[key]
 
@@ -383,7 +383,7 @@ def remove_largevar(df, key, var_th):
                 valmin = val0*(1 - var_th)
                 valmax = val0*(1 + var_th)
 
-    print(idx_list)
+    #print(idx_list)
     df = df.loc[idx_list]
     return df
 
@@ -434,7 +434,7 @@ def SST_ltcor(target, jd):
     lt_s = ast["delta"]*au_m/c
     lt_day = lt_s / 3600./24.
     jd_ltcor = jd - lt_day
-    print(f"  epoch_jd       : {jd}")
-    print(f"  epoch_jd_ltcor : {jd_ltcor.value[0]}")
+    #print(f"  epoch_jd       : {jd}")
+    #print(f"  epoch_jd_ltcor : {jd_ltcor.value[0]}")
     jd_ltcor = jd_ltcor.value[0]
     return jd_ltcor
