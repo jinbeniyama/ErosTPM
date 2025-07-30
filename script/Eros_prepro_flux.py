@@ -22,6 +22,7 @@ Note
 import os 
 from argparse import ArgumentParser as ap
 import pandas as pd
+import numpy as np
 from astroquery.jplhorizons import Horizons
 from astropy.constants import c, au
 from astropy.time import Time
