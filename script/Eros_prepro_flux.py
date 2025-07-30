@@ -24,10 +24,86 @@ from argparse import ArgumentParser as ap
 import pandas as pd
 from astroquery.jplhorizons import Horizons
 from astropy.constants import c, au
+from astropy.time import Time
 
 from Eros_common import (
     Eros_Harris1999, Eros_Lim2005_3, Eros_Wolters2008, remove_largevar, 
     remove_edge, SST_ltcor)
+
+
+# Calculate average of the two SST spectra
+# 2025-07-30
+import numpy as np
+import pandas as pd
+from scipy.interpolate import interp1d
+
+def make_ave_SST(df1, df2):
+    """Make avareged spectrum for SST (of Eros).
+
+    Parameters
+    ----------
+    df1 : pandas.DataFrame
+        input data1
+    df2 : pandas.DataFrame
+        input data2
+
+    Return
+    ------
+    df12 : pandas.DataFrame
+        output merged data
+    """
+
+    # Most of the wavelengths are the same, but not always all of them.
+    w1 = sorted(set(df1.wavelength))
+    w2 = sorted(set(df2.wavelength))
+
+    # Final wavelength grids
+    w12 = sorted(set(w1 + w2))
+
+    print(f"wavelength 1 N = {len(w1)}")
+    print(f"wavelength 2 N = {len(w2)}")
+    print(f"-> combined grid N = {len(w12)}")
+
+    # Set wavelength as index
+    df1_ = df1.set_index("wavelength")
+    df2_ = df2.set_index("wavelength")
+
+    # Make a new dataframe
+    f_mean = []
+    ferr_mean = []
+
+    for w in w12:
+        f1 = df1_["flux"][w] if w in df1_.index else np.nan
+        f2 = df2_["flux"][w] if w in df2_.index else np.nan
+        e1 = df1_["fluxerr"][w] if w in df1_.index else np.nan
+        e2 = df2_["fluxerr"][w] if w in df2_.index else np.nan
+
+        # Mean
+        if not np.isnan(f1) and not np.isnan(f2):
+            f = 0.5 * (f1 + f2)
+            # Error
+            ferr = 0.5 * np.abs(f1 - f2) 
+        elif not np.isnan(f1):
+            f = f1
+            ferr = e1
+        elif not np.isnan(f2):
+            f = f2
+            ferr = e2
+        else:
+            f = np.nan
+            ferr = np.nan
+            assert False, "Check the code."
+
+        f_mean.append(f)
+        ferr_mean.append(ferr)
+
+    df_12 = pd.DataFrame({
+        "wavelength": w12,
+        "flux": f_mean,
+        "fluxerr": ferr_mean
+    })
+    return df_12
+
 
 
 if __name__ == "__main__":
@@ -96,34 +172,27 @@ if __name__ == "__main__":
     # In Vernazza+2010: They used spectra obtained from 2004-09-30 00:52 to 01:01.
     # downloaded from https://pds-smallbodies.astro.umd.edu/data_other/sptz_02_INNER/a433.shtml#top
 
-    # ch0: 4 out of 12 spectra
-    #      -> Not use! (To be updated)
+    # ch0: -> Not use!
     # ch2: all 4 spectra
     f_dir = args.fdir
     f_list = [
-        #"SPITZER_S0_4872960_0001_9_E7275827_tune.tbl",
-        #"SPITZER_S0_4872960_0004_9_E7275831_tune.tbl",
-        #"SPITZER_S0_4872960_0007_9_E7275841_tune.tbl",
-        #"SPITZER_S0_4872960_0010_9_E7275844_tune.tbl",
         "SPITZER_S2_4872960_0012_9_E7275703_tune.tbl", 
         "SPITZER_S2_4872960_0013_9_E7275707_tune.tbl",
         "SPITZER_S2_4872960_0014_9_E7275704_tune.tbl",
         "SPITZER_S2_4872960_0015_9_E7275696_tune.tbl",
     ]
     utc_list = [
-        #"2004-09-30T00:52:43.624",
-        #"2004-09-30T00:54:32.420",
-        #"2004-09-30T00:56:14.834",
-        #"2004-09-30T00:57:36.623",
         "2004-09-30T00:58:58.419", 
         "2004-09-30T00:59:27.618",
         "2004-09-30T01:00:00.021",
         "2004-09-30T01:00:29.216",
     ]
-    #specidx_list = [2, 5, 8, 11, 1, 2, 3, 4]
     specidx_list = [1, 2, 3, 4]
-
-    key_skip = ["\\processing", "\\wavsamp", "\\char", "\\character", "\\COMMENT", "\\HISTORY", "\\int", "\\float"]
+    
+    # Not used
+    key_skip = [
+        "\\processing", "\\wavsamp", "\\char", "\\character", 
+        "\\COMMENT",  "\\HISTORY", "\\int", "\\float"]
     df_list = []
     for f in f_list:
         f0 = os.path.join(f_dir, f)
@@ -160,11 +229,40 @@ if __name__ == "__main__":
                         # Save data
                         dftemp_list.append(df)
 
-                      
-                      
         # Make a dataframe
         df_1spec = pd.concat(dftemp_list)
         df_list.append(df_1spec)
+    
+    # Merge two spectra in each wavelength region
+    assert len(df_list) == 4, "Check the code"
+
+    df_SST1 = df_list[0]
+    df_SST2 = df_list[1]
+    df_SST3 = df_list[2]
+    df_SST4 = df_list[3]
+
+    print("SST data size (original)")
+    print(f"  N1 = {len(df_SST1)}")
+    print(f"  N2 = {len(df_SST2)}")
+    print(f"  N3 = {len(df_SST3)}")
+    print(f"  N4 = {len(df_SST4)}")
+
+    # Remove data with flag
+    df_SST1 = df_SST1[df_SST1["bit-flag"] == "0"]
+    df_SST1 = df_SST1.astype(float)
+    df_SST2 = df_SST2[df_SST2["bit-flag"] == "0"]
+    df_SST2 = df_SST2.astype(float)
+    df_SST3 = df_SST3[df_SST3["bit-flag"] == "0"]
+    df_SST3 = df_SST3.astype(float)
+    df_SST4 = df_SST4[df_SST4["bit-flag"] == "0"]
+    df_SST4 = df_SST4.astype(float)
+
+    print("SST data size (after removal with flag )")
+    print(f"  N1 = {len(df_SST1)}")
+    print(f"  N2 = {len(df_SST2)}")
+    print(f"  N3 = {len(df_SST3)}")
+    print(f"  N4 = {len(df_SST4)}")
+
 
     # # Do light-time correction, save results, and plot
     # Obs time
@@ -175,14 +273,14 @@ if __name__ == "__main__":
     # EXPTOT_T: w/deadtime?
     #   14.68 s
     
-    # TODO: hyper parameters to remove outliers
     # Relative error
     err_th = 0.05
     # Variation (25%)
     var_th = 0.25
     
     key_w, key_flux, key_fluxerr = "wavelength", "flux_density", "error"
-    df4out_list = []
+
+    df_list_cor = []
     for idx, df in enumerate(df_list):
         
         # Remove data with flag
@@ -194,29 +292,44 @@ if __name__ == "__main__":
         df = remove_largevar(df, key_flux, var_th)
         # Remove edge
         df = remove_edge(df, 3)
-        
-        # Save
-        utc_obs = utc_list[idx]
-        # ltcor
-        jd_ltcor = SST_ltcor(433, utc_obs)
         df = df.rename(columns={"flux_density":"flux", "error":"fluxerr"})
-    
-        df["jd"] = jd_ltcor
-        df["cflag"] = 999
-        #if idx < 4:
-        #    ch = 0
-        #else:
-        ch = 2
-        df["memo"] = f"SSTch{ch}_{specidx_list[idx]}"
-        df["code"] = "@sst"
-    
-        df4out = df[col4out]
-        df4out_list.append(df4out)
+        df_list_cor.append(df)
 
-    # Merge 6 spectra
-    df_S = pd.concat(df4out_list)
-    print(f" Original N={len(df_S)} (SST)")
-    print(f"  Columns: {df_S.columns.tolist()}")
+    # Merge 2 spectra in each wavelength region
+    df_SST1 = df_list_cor[0]
+    df_SST2 = df_list_cor[1]
+    df_SST3 = df_list_cor[2]
+    df_SST4 = df_list_cor[3]
+    
+    # Get mean spectrum
+    df_S_12 = make_ave_SST(df_SST1, df_SST2)
+    df_S_34 = make_ave_SST(df_SST3, df_SST4)
+    print(f" Merged N={len(df_S_12)} (SST 14--20 micron)")
+    print(f" Merged N={len(df_S_34)} (SST 20--39 micron)")
+
+    # Mean utc1 and utc2
+    utc1 = utc_list[0]
+    jd1 = Time(utc1, format="isot", scale="utc").jd
+    utc2 = utc_list[1]
+    jd2 = Time(utc2, format="isot", scale="utc").jd
+    jd12 = np.mean([jd1, jd2])
+    jd12_ltcor = SST_ltcor(433, jd12)
+    df_S_12["jd"] = jd12_ltcor
+    df_S_12["cflag"] = 999
+    df_S_12["memo"] = f"SSTch2_1_and_2"
+    df_S_12["code"] = "@sst"
+
+    # Mean utc3 and utc4
+    utc3 = utc_list[2]
+    jd3 = Time(utc3, format="isot", scale="utc").jd
+    utc4 = utc_list[3]
+    jd4 = Time(utc4, format="isot", scale="utc").jd
+    jd34 = np.mean([jd3, jd4])
+    jd34_ltcor = SST_ltcor(433, jd34)
+    df_S_34["jd"] = jd34_ltcor
+    df_S_34["cflag"] = 999
+    df_S_34["memo"] = f"SSTch2_3_and_4"
+    df_S_34["code"] = "@sst"
     # 4. SST/IRS ==============================================================
  
 
@@ -245,8 +358,9 @@ if __name__ == "__main__":
 
 
     # Make a single merged file
-    df = pd.concat([df_H99, df_L05, df_W08, df_S, df_A])
+    df = pd.concat([df_H99, df_L05, df_W08, df_S_12, df_S_34, df_A])
     # Save 
     out = f"Eros_flux_N{len(df)}.txt"
     out = os.path.join(args.outdir, out)
     df.to_csv(out, sep=" ", index=False)
+
