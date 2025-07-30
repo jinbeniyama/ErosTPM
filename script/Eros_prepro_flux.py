@@ -77,7 +77,10 @@ def make_ave_SST(df1, df2):
         if not np.isnan(f1) and not np.isnan(f2):
             f = 0.5 * (f1 + f2)
             # Error
-            ferr = 0.5 * np.abs(f1 - f2) 
+            ferr_ave = 0.5 * np.abs(f1 - f2) 
+            # Original error
+            ferr_ori = (0.5*(e1**2 + e2**2))**0.5
+            ferr = (ferr_ave**2 + ferr_ori**2)**0.5
         elif not np.isnan(f1):
             f = f1
             ferr = e1
