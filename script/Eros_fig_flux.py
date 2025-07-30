@@ -45,33 +45,18 @@ if __name__ == "__main__":
     # Plot fluxes
     tel_list = list(set(df.memo.values.tolist()))
     # Sort by year in ascending order
-    tel_list = ["UKIRT1998", "UKIRT2002", "Lim2005_3", "SSTch0_2", "SSTch0_5", "SSTch0_8", 
-                "SSTch0_11", "SSTch2_3", "SSTch2_4", "SSTch2_1", "SSTch2_2", "akari"]
-
+    tel_list = ["UKIRT1998", "UKIRT2002", "Lim2005_3", 
+                "SSTch2_1_and_2", "SSTch2_3_and_4",
+                "akari"]
 
     # Make a reference column
     df["ref"] = 0
     df.loc[(df['memo'] == 'UKIRT1998'), 'ref'] = "Harris et al. (1999)"
     df.loc[(df['memo'] == 'UKIRT2002'), 'ref'] = "Wolters et al. (2008)"
     df.loc[(df['memo'] == 'Lim2005_3'), 'ref'] = "Lim et al. (2005)"
-    df.loc[(df['memo'] == 'SSTch0_2'), 'ref'] = "SST/IRS"
-    df.loc[(df['memo'] == 'SSTch0_5'), 'ref'] = "SST/IRS"
-    df.loc[(df['memo'] == 'SSTch0_8'), 'ref'] = "SST/IRS"
-    df.loc[(df['memo'] == 'SSTch0_11'), 'ref'] = "SST/IRS"
-    df.loc[(df['memo'] == 'SSTch2_1'), 'ref'] = "SST/IRS"
-    df.loc[(df['memo'] == 'SSTch2_2'), 'ref'] = "SST/IRS"
-    df.loc[(df['memo'] == 'SSTch2_3'), 'ref'] = "SST/IRS"
-    df.loc[(df['memo'] == 'SSTch2_4'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'SSTch2_1_and_2'), 'ref'] = "SST/IRS"
+    df.loc[(df['memo'] == 'SSTch2_3_and_4'), 'ref'] = "SST/IRS"
     df.loc[(df['memo'] == 'akari'), 'ref'] = "AKARI/IRC"
-
-    # ad hoc
-    N0 = len(df)
-    df = df[df["memo"] != "SSTch0_2"]
-    df = df[df["memo"] != "SSTch0_5"]
-    df = df[df["memo"] != "SSTch0_8"]
-    df = df[df["memo"] != "SSTch0_11"]
-    N1 = len(df)
-    print(f"  N={N0-N1} are removed (ch0 of SST)")
 
     out = "Eros_fig_flux.pdf"
     out = os.path.join(args.outdir, out)
