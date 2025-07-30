@@ -39,8 +39,8 @@ def tel2col(tel):
     elif tel == "Lim2005_3":
         col = mycolor[2]
     elif tel in [
-        "SSTch0_2", "SSTch0_5", "SSTch0_8", "SSTch0_11", 
-        "SSTch2_1",  "SSTch2_2", "SSTch2_3", "SSTch2_4"]:
+        "SSTch2_1_and_2", 
+        "SSTch2_3_and_4"]:
         col = mycolor[3]
     elif tel == "akari":
         col = mycolor[5]
@@ -69,11 +69,9 @@ def tel2lab(tel):
     elif tel == "Lim2005_3":
         lab = "2002-09-21,22 (Lim+2005)\nN=53"
     elif tel in [
-        "SSTch0_2", "SSTch0_5", "SSTch0_8", "SSTch0_11", 
-        "SSTch2_1",  "SSTch2_2", "SSTch2_3", "SSTch2_4"]:
-        #lab = "2004-09-30 (SST)\nN=752"
-        # wo/ch0
-        lab = "2004-09-30 (SST)\nN=356"
+        "SSTch2_1_and_2", "SSTch2_3_and_4"]:
+        # Only four, averaged
+        lab = "2004-09-30 (SST)\nN=180"
     elif tel == "akari":
         lab = "2007-04-08(AKARI)\nN=5"
     else:
