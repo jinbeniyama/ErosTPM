@@ -167,6 +167,7 @@ def extract_DATE_OBS_SST(f0):
                 # Convert to jd
                 t_jd = Time(str(t_utc), format='isot', scale='utc').jd
                 return t_jd
+    assert False, f0
     return None  
 
 
@@ -214,6 +215,9 @@ def extract_SST_flux(fdir, out):
             channel = os.path.join(block, channel, "pbcd")
             tbls = [name for name in os.listdir(channel)
               if os.path.isfile(os.path.join(channel, name)) and name.startswith('S')]
+            # Not use .txt
+            tbls = [name for name in os.listdir(channel)
+              if os.path.isfile(os.path.join(channel, name)) and name.endswith('tbl')]
             N_tbl = len(tbls)
             print(f"          Number of files (starting 'SPITZER') N={N_tbl}")
 
@@ -344,11 +348,11 @@ if __name__ == "__main__":
     parser = ap(
         description="Preprocess of thermal fluxes of Icarus and Itokawa.")
     parser.add_argument(
-        "fdir_Icarus", type=str, 
-        help="input file directory for Icarus")
+        "--fdir", type=str, nargs="*",
+        help="input file directory downloaded from Spitzer website")
     parser.add_argument(
-        "fdir_Itokawa", type=str, 
-        help="input file directory for Itokawa")
+        "--labels", type=str, nargs="*",
+        help="Labels used in output filenames")
     parser.add_argument(
         "--outdir", type=str, default="../data",
         help="output directory")
@@ -359,19 +363,22 @@ if __name__ == "__main__":
     if not os.path.isdir(outdir):
         os.makedirs(outdir)
 
+    assert len(args.fdir) == len(args.labels), "Check input arguments."
+
     # Read input files
     # Columns used in the final output:
     # jd wavelength flux fluxerr code cflag memo
-    col4out = ["jd", "wavelength", "flux", "fluxerr", "code", "cflag", "memo"]
-    
-    out = "SST_flux_Icarus.txt"
-    out = os.path.join(args.outdir, out)
-    extract_SST_flux(args.fdir_Icarus, out)
+    #col4out = ["jd", "wavelength", "flux", "fluxerr", "code", "cflag", "memo"]
 
-    out = "SST_flux_Itokawa.txt"
-    out = os.path.join(args.outdir, out)
-    extract_SST_flux(args.fdir_Itokawa, out)
+    for (fdir, label) in zip(args.fdir, args.labels):
 
+        out = f"SST_flux_{label}.txt"
+        out = os.path.join(args.outdir, out)
+        extract_SST_flux(fdir, out)
+        print(f"{label}")
+        print(f"  Extracted SST fluxes from {fdir}.")
+        print(f"  Save as {out}.")
+        print("")
     
     assert False, 1
     # # Do light-time correction, save results, and plot
