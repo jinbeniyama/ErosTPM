@@ -17,6 +17,10 @@ mycolor = [
     "#AD002D", "#1e50a2", "#69821b", "#f055f0", "#afafb0", 
     "#0095b9", "#89c3eb", "#ec6800", "cyan", "gold", "magenta"
     ] 
+mycolor = mycolor*10
+
+mymark = ["o", "^", "s", "D", "*", "v", "<", ">", "h", "H"]
+mymark = mymark*100
 
 
 def tel2col(tel):
