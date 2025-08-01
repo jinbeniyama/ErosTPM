@@ -324,6 +324,10 @@ if __name__ == "__main__":
     df_S_34["cflag"] = 999
     df_S_34["memo"] = f"SSTch2_3_and_4"
     df_S_34["code"] = "@sst"
+    
+    # Set relative error as 5% (see Hanus+2016)
+    df_S_12["fluxerr"] = df_S_12["flux"]*0.05
+    df_S_34["fluxerr"] = df_S_34["flux"]*0.05
     # 4. SST/IRS ==============================================================
  
 
