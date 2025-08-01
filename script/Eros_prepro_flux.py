@@ -151,6 +151,9 @@ if __name__ == "__main__":
     f_L05 = args.f_L05
     df_L05 = Eros_Lim2005_3(f_L05)
     df_L05 = df_L05[col4out]
+    # Set error as 10%
+    df_L05["fluxerr"] = df_L05["flux"]*0.1
+
     print(f"Original N={len(df_L05)} (L05)")
     print(f"    Columns: {df_L05.columns.tolist()}\n")
     # 2. Lim+2005 =============================================================
