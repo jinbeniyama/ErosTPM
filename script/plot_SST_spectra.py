@@ -4,6 +4,7 @@
 Plot thermal fluxes by SST.
 """
 import os 
+import sys
 from argparse import ArgumentParser as ap
 import pandas as pd
 import numpy as np
@@ -117,8 +118,13 @@ if __name__ == "__main__":
         plot_SST_flux(df, label, out=out)
         print(f"  Plot SST fluxes and save as {out}.")
 
-        # Make emissivity
-        out = f"SST_emissivity_{label}.pdf"
-        out = os.path.join(outdir, out)
-        plot_SST_emissivity(df, label, out=out)
-        print(f"  Plot SST emissivities and save as {out}.")
+    sys.exit()
+
+    # To make emissivity spectrum, 
+    # the model is important. A polynomial is not enough.
+    # (see, e.g., Hanus+2016, A&A)
+    # Make emissivity
+    out = f"SST_emissivity_{label}.pdf"
+    out = os.path.join(outdir, out)
+    plot_SST_emissivity(df, label, out=out)
+    print(f"  Plot SST emissivities and save as {out}.")
