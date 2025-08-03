@@ -43,18 +43,8 @@ Skip and go to "Plot figures" if you just make figures in the paper.
 
 1. Do TPM with brute-force method
 ```
-# TPM N=998
-#bash 1_ErosTPM.sh ../433.obj ../433_spin.txt 433_obs_N998.txt 433_eph_N998.txt TPMresult_20250508_LagerrosApp
-
-# TPM with new grids on 2025-07-24
-bash script/ErosTPM_newgrid.sh data/433.obj data/433_spin.txt data/433_obs_N602.txt data/433_eph_N602.txt TPMres_normal_20250724_re
-# Test with new grids with landscape model on 2025-07-24
-bash script/ErosTPM_landscape_newgrid.sh data/433.obj data/433_spin.txt data/433_obs_N602.txt data/433_eph_N602.txt TPMres_landscape_20250724
-
-# TPM with new grids on 2025-08-01
-bash script/ErosTPM_newgrid.sh data/433.obj data/433_spin.txt data/433_obs_N426.txt data/433_eph_N426.txt TPMres_normal_20250801
-bash script/ErosTPM_newgrid.sh data/433.obj data/433_spin.txt data/433_obs_N426.txt data/433_eph_N426.txt TPMres_normal_20250801_SST_Lim_error_update
-
+# TPM with new grids on 2025-08-03
+bash script/ErosTPM_newgrid.sh data/433.obj data/433_spin.txt data/433_obs_N448.txt data/433_eph_N448.txt TPMres_20250803
 ```
 
 ```
