@@ -151,7 +151,7 @@ if __name__ == "__main__":
     f_L05 = args.f_L05
     df_L05 = Eros_Lim2005_3(f_L05)
     df_L05 = df_L05[col4out]
-    # Set error as 10%
+    # Set error as 10% (See Lim+2005)
     df_L05["fluxerr"] = df_L05["flux"]*0.1
 
     print(f"Original N={len(df_L05)} (L05)")
@@ -162,6 +162,8 @@ if __name__ == "__main__":
     # N = 13
     df_W08 = Eros_Wolters2008()
     df_W08 = df_W08[col4out]
+    # Set error as 7% (See Wolters+2008)
+    df_W08["fluxerr"] = df_W08["flux"]*0.07
     print(f"Original N={len(df_W08)} (W08)")
     print(f"    Columns: {df_W08.columns.tolist()}\n")
     # 3. Wolters+2008 =========================================================
@@ -217,6 +219,7 @@ if __name__ == "__main__":
                     # Data
                     else:
                         l_data = l.split()
+                        l_data = [float(x) for x in l_data]
                         # Check dimension
                         assert len(keys) == len(l_data)
                         # Make df
@@ -246,21 +249,30 @@ if __name__ == "__main__":
     print(f"    N4 = {len(df_SST4)}\n")
 
     # Remove data with flag
-    df_SST1 = df_SST1[df_SST1["bit-flag"] == "0"]
-    df_SST1 = df_SST1.astype(float)
-    df_SST2 = df_SST2[df_SST2["bit-flag"] == "0"]
-    df_SST2 = df_SST2.astype(float)
-    df_SST3 = df_SST3[df_SST3["bit-flag"] == "0"]
-    df_SST3 = df_SST3.astype(float)
-    df_SST4 = df_SST4[df_SST4["bit-flag"] == "0"]
-    df_SST4 = df_SST4.astype(float)
+    df_SST1 = df_SST1[df_SST1["bit-flag"] == 0.0]
+    df_SST2 = df_SST2[df_SST2["bit-flag"] == 0.0]
+    df_SST3 = df_SST3[df_SST3["bit-flag"] == 0.0]
+    df_SST4 = df_SST4[df_SST4["bit-flag"] == 0.0]
 
     print("After removal with flag ")
     print(f"    N1 = {len(df_SST1)}")
     print(f"    N2 = {len(df_SST2)}")
     print(f"    N3 = {len(df_SST3)}")
     print(f"    N4 = {len(df_SST4)}\n")
+    
+    # Use order 1 or 2
+    #df_SST1 = df_SST1[(df_SST1["order"] == 1) | (df_SST1["order"] == 2)]
+    #df_SST2 = df_SST2[(df_SST2["order"] == 1) | (df_SST2["order"] == 2)]
+    #df_SST3 = df_SST3[(df_SST3["order"] == 1) | (df_SST3["order"] == 2)]
+    #df_SST4 = df_SST4[(df_SST4["order"] == 1) | (df_SST4["order"] == 2)]
 
+    print("After removal with order (Use only 2 and 3) ")
+    print(f"    N1 = {len(df_SST1)}")
+    print(f"    N2 = {len(df_SST2)}")
+    print(f"    N3 = {len(df_SST3)}")
+    print(f"    N4 = {len(df_SST4)}\n")
+
+    df_list = [df_SST1, df_SST2, df_SST3, df_SST4]
 
     # # Do light-time correction, save results, and plot
     # Obs time
@@ -272,7 +284,7 @@ if __name__ == "__main__":
     #   14.68 s
     
     # Relative error
-    err_th = 0.05
+    err_th = 0.10
     # Variation (25%)
     var_th = 0.25
     
@@ -280,9 +292,6 @@ if __name__ == "__main__":
     df_list_cor = []
     for idx, df in enumerate(df_list):
         
-        # Remove data with flag
-        df = df[df["bit-flag"] == "0"]
-        df = df.astype(float)
         # Remove large error
         df = df[df[key_fluxerr]/df[key_flux] < err_th]
         # Remove large variation
@@ -297,6 +306,12 @@ if __name__ == "__main__":
     df_SST2 = df_list_cor[1]
     df_SST3 = df_list_cor[2]
     df_SST4 = df_list_cor[3]
+
+    print("After removal of outliers")
+    print(f"    N1 = {len(df_SST1)}")
+    print(f"    N2 = {len(df_SST2)}")
+    print(f"    N3 = {len(df_SST3)}")
+    print(f"    N4 = {len(df_SST4)}\n")
     
     # Get mean spectrum
     df_S_12 = make_ave_SST(df_SST1, df_SST2)
