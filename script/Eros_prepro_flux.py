@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Preprocesses of thermal fluxes of Eros.
 
-N = 426 (= 175+13+53+180+5)
+N = 448 (= 175+13+53+202+5)
 
 1. Eros in 1998 published in Harris+1999
    Q-band spectra are not used 
@@ -261,10 +261,10 @@ if __name__ == "__main__":
     print(f"    N4 = {len(df_SST4)}\n")
     
     # Use order 1 or 2
-    #df_SST1 = df_SST1[(df_SST1["order"] == 1) | (df_SST1["order"] == 2)]
-    #df_SST2 = df_SST2[(df_SST2["order"] == 1) | (df_SST2["order"] == 2)]
-    #df_SST3 = df_SST3[(df_SST3["order"] == 1) | (df_SST3["order"] == 2)]
-    #df_SST4 = df_SST4[(df_SST4["order"] == 1) | (df_SST4["order"] == 2)]
+    df_SST1 = df_SST1[(df_SST1["order"] == 1) | (df_SST1["order"] == 2)]
+    df_SST2 = df_SST2[(df_SST2["order"] == 1) | (df_SST2["order"] == 2)]
+    df_SST3 = df_SST3[(df_SST3["order"] == 1) | (df_SST3["order"] == 2)]
+    df_SST4 = df_SST4[(df_SST4["order"] == 1) | (df_SST4["order"] == 2)]
 
     print("After removal with order (Use only 2 and 3) ")
     print(f"    N1 = {len(df_SST1)}")
@@ -296,17 +296,21 @@ if __name__ == "__main__":
         df = df[df[key_fluxerr]/df[key_flux] < err_th]
         # Remove large variation
         df = remove_largevar(df, key_flux, var_th)
+
         # Remove edge
-        df = remove_edge(df, 3)
+        #df = remove_edge(df, 3)
+        df = df.reset_index(drop=True)
+
         df = df.rename(columns={"flux_density":"flux", "error":"fluxerr"})
         df_list_cor.append(df)
+
 
     # Merge 2 spectra in each wavelength region
     df_SST1 = df_list_cor[0]
     df_SST2 = df_list_cor[1]
     df_SST3 = df_list_cor[2]
     df_SST4 = df_list_cor[3]
-
+    
     print("After removal of outliers")
     print(f"    N1 = {len(df_SST1)}")
     print(f"    N2 = {len(df_SST2)}")
