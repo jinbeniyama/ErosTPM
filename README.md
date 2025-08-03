@@ -51,26 +51,24 @@ make_obseph.py 433 Eros_flux_N448.txt --out_obs 433_obs_N448.txt --out_eph 433_e
 ## Procedure
 Skip and go to "Plot figures" if you just make figures in the paper.
 
-1. Do TPM with brute-force method
+1. **Do TPM with brute-force method**
 ```
 # TPM with new grids on 2025-08-03
 bash script/ErosTPM_newgrid.sh data/433.obj data/433_spin.txt data/433_obs_N448.txt data/433_eph_N448.txt TPMres_20250803
 ```
 
+2. **Make look up table**
 ```
-# Make look up table.
 make_lut.py TPMresult_20250508_LagerrosApp --out data/lut_20250508.txt
-# Test
-make_lut.py TPMres_normal_20250724 --out data/lut_normal_20250725.txt
 ```
 
-2. **Make neural-network (NN) model to predict thermal flux**
+3. **Make neural-network (NN) model to predict thermal flux**
 ```
 DemoNN.ipynb
 ```
 The results are saved in `saved_model`.
 
-3. **Predict thermal fluxes with the NN model**
+4. **Predict thermal fluxes with the NN model**
 ```
 bash 3_predictflux.sh (NN model made in process 2.)
 bash 3_predictflux.sh NNmodel
