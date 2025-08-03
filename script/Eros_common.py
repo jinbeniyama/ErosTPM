@@ -75,7 +75,7 @@ def tel2lab(tel):
     elif tel in [
         "SSTch2_1_and_2", "SSTch2_3_and_4"]:
         # Only four, averaged
-        lab = "2004-09-30 (SST)\nN=180"
+        lab = "2004-09-30 (SST)\nN=202"
     elif tel == "akari":
         lab = "2007-04-08(AKARI)\nN=5"
     else:
