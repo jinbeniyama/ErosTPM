@@ -23,13 +23,14 @@ Figures are made in `./plot`.
 * `433_spin.txt` (spin file of Eros, downloaded from DAMIT, `https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083`, `spin.txt`)
 * `Eros_UKIRT_June_1998_modified_by_JB.txt` (provided by A. Harris and modified by J. Beniyama)
 * `Eros_flux_N448.txt` (observation files after preprocessing, which is made with `Eros_prepro_flux.py`)
-* `SPITZER_S0_4872960_0001_9_E7275827_tune.tbl`, `SPITZER_S0_4872960_0004_9_E7275831_tune.tbl`,
-  `SPITZER_S0_4872960_0007_9_E7275841_tune.tbl`, `SPITZER_S0_4872960_0010_9_E7275844_tune.tbl`,
+* `SPITZER_S0_4872960_0001_9_E7275827_tune.tbl (not used)`, `SPITZER_S0_4872960_0004_9_E7275831_tune.tbl (not used)`,
+  `SPITZER_S0_4872960_0007_9_E7275841_tune.tbl (not used)`, `SPITZER_S0_4872960_0010_9_E7275844_tune.tbl (not used)`,
   `SPITZER_S2_4872960_0012_9_E7275703_tune.tbl`, `SPITZER_S2_4872960_0013_9_E7275707_tune.tbl`,
   `SPITZER_S2_4872960_0014_9_E7275704_tune.tbl`, `SPITZER_S2_4872960_0015_9_E7275696_tune.tbl`
   (SST/IRS spectra, downloaded from `https://pds-smallbodies.astro.umd.edu/data_other/Spitzer.shtm`)
-* SSTinfo.txt (SST pointing information)
+* `SSTinfo.txt` (SST pointing information)
 * `erosLim-2002sept22_Jy.flx` (thermal flux from Lim+2005, scanned from their Fig.7 on p. 398)
+* `lut_20250508.txt` (look-up table used to make NN model)
 * `pre_akari.dat` (AKARI observations downloaded from `https://darts.isas.jaxa.jp/astro/akari/data/AKARI-IRC_Catalogue_AllSky_ASTFLUX_1.0.html`)
 
 ## Preprocesses
