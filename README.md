@@ -81,23 +81,36 @@ python ../script/Eros_fig_loc.py
 python ../script/Eros_fig_flux.py ../data/Eros_flux_N448.txt
 ```
 
-- Single-component fit, TI vs. chi-squared (Figure X., in prep.)
+- Single-component fit wo/NN, TI vs. chi-squared 
 ```
 # SST 5%, Lim+ 10%, Wolters+2008 7%
-plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 1 100 --out chi2_single_20250803.pdf
-plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 1 4 --out chi2_single_scale_per_obs_20250803.pdf
+plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 1 100 --paper P14 --out chi2_single_20250803.pdf
+#plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 1 4 --out chi2_single_scale_per_obs_20250803.pdf
+#plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 1 4 --out chi2_single_scale_per_obs_20250803.pdf
 ```
 
-- Dual-component fit, TI vs. chi-squared (Figure X., in prep.)
+- Single-component fit w/NN, TI vs. chi-squared 
 ```
+(In prep.)
 plot_tpm_brute_NN.py NN_TPMres.txt --fixscale --reduce --logx --logy --N_param 2 --out Eros_fig_chi2single_NN.pdf
+```
+
+- Dual-component fit wo/NN, TI vs. chi-squared (Figure X., in prep.)
+```
+blend_tpm_result_iter.py ../TPMres_20250803/tpmout* --resdir "../TPMres_20250803/" --fixscale --TI0 60 --out blended_flux_fixscale_iter.txt --T_typical 250
+# -> TI_thresh = 34.80
+plot_blended_result_RMS.py blended_flux_fixscale_iter.txt --reduce --dof 446 --TI_thresh 34.80
+```
+- Dual-component fit w/NN, TI vs. chi-squared (Figure X., in prep.)
+```
+(In prep.)
 ```
 
 - Field of view at the time of SST observations (Figure X., in prep.)
 ```
-python ../script/Eros_fig_SSTFoV.py ../data/433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat
+# python ../script/Eros_fig_SSTFoV.py ../data/433_akari_ukirt1998_ukirt2002_lim2005_3_SST_six_20250110.dat
 ``` 
 
 ## Dependencies
 This repository is depending on `Python`, `NumPy`, `pandas`, `SciPy`, `Astropy`, `Astroquery`, `TREM`.
-The tpm code is downloaded from `https://www.oca.eu/images/LAGRANGE/pages_perso/delbo/thermops.tar.gz`.
+The TPM code is downloaded from `https://www.oca.eu/images/LAGRANGE/pages_perso/delbo/thermops.tar.gz`.
