@@ -9,11 +9,11 @@ Figures are made in `./plot`.
 
 ## Data (in /data)
 * `433.obj` (shape model of Eros, downloaded from DAMIT, `https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083`, `shape.obj`)
-* `433_eph_N998.txt` (ephemeris file paired with `433_obs_N998.txt`, made by J.B.)
-* `433_obs_N998.txt` (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
+* `433_eph_N448.txt` (ephemeris file paired with `433_obs_N448.txt`, made by J.B.)
+* `433_obs_N448.txt` (thermal observations formatted for TPM, read the paper for the details, made by J.B.)
 * `433_spin.txt` (spin file of Eros, downloaded from DAMIT, `https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083`, `spin.txt`)
 * `Eros_UKIRT_June_1998_modified_by_JB.txt` (provided by A. Harris and modified by J. Beniyama)
-* `Eros_flux_N998.txt` (observation files after preprocessing, which is made with `Eros_prepro_flux.py`)
+* `Eros_flux_N448.txt` (observation files after preprocessing, which is made with `Eros_prepro_flux.py`)
 * `SPITZER_S0_4872960_0001_9_E7275827_tune.tbl`, `SPITZER_S0_4872960_0004_9_E7275831_tune.tbl`,
   `SPITZER_S0_4872960_0007_9_E7275841_tune.tbl`, `SPITZER_S0_4872960_0010_9_E7275844_tune.tbl`,
   `SPITZER_S2_4872960_0012_9_E7275703_tune.tbl`, `SPITZER_S2_4872960_0013_9_E7275707_tune.tbl`,
@@ -28,25 +28,14 @@ Execute folloing commands in `./data` to make obs file and ephemeris file for th
 
 - Preprocess of thermal infrared fluxes.
 ``` 
-# With 8 SST spectra (N=998)
-#python ../script/Eros_prepro_flux.py ../data/Eros_UKIRT_June_1998_modified_by_JB.txt ../data/erosLim-2002sept22_Jy.flx ../data/pre_akari.dat
-# With only 4 SST spectra (N=602)
-#python script/Eros_prepro_flux.py data/Eros_UKIRT_June_1998_modified_by_JB.txt data/erosLim-2002sept22_Jy.flx data/pre_akari.dat
-# With only 2 averaged SST spectra (N=426)
+# With only 2 averaged SST spectra (N=448)
 python script/Eros_prepro_flux.py data/Eros_UKIRT_June_1998_modified_by_JB.txt data/erosLim-2002sept22_Jy.flx data/pre_akari.dat
 ``` 
 
 - Make obs and ephemeris files (in `/data`)
 ```
-# With only 8 SST spectra (N=998)
-#make_obseph.py 433 Eros_flux_N998.txt --out_obs 433_obs_N998.txt --out_eph 433_eph_N998.txt
-# With only 4 SST spectra (N=602)
-#make_obseph.py 433 Eros_flux_N602.txt --out_obs 433_obs_N602.txt --out_eph 433_eph_N602.txt
-# With only 2 averaged SST spectra (N=426)
-## Nominal error
-make_obseph.py 433 Eros_flux_N426.txt --out_obs 433_obs_N426_nominal.txt --out_eph 433_eph_N426.txt
-## 5% error for Spitzer
-make_obseph.py 433 Eros_flux_N426.txt --out_obs 433_obs_N426.txt --out_eph 433_eph_N426.txt
+# With only 2 averaged SST spectra (N=448)
+make_obseph.py 433 Eros_flux_N448.txt --out_obs 433_obs_N448.txt --out_eph 433_eph_N448.txt
 ```
 
 ## Procedure
@@ -101,6 +90,7 @@ python ../script/Eros_fig_loc.py
 ``` 
 #python ../script/Eros_fig_flux.py ../data/Eros_flux_N998.txt
 python ../script/Eros_fig_flux.py ../data/Eros_flux_N426.txt
+python ../script/Eros_fig_flux.py ../data/Eros_flux_N436.txt
 ```
 
 - Single-component fit, TI vs. chi-squared (Figure X., in prep.)
