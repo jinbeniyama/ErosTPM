@@ -78,9 +78,7 @@ python ../script/Eros_fig_loc.py
 
 - Thermal flux of Eros (Figure X.)
 ``` 
-#python ../script/Eros_fig_flux.py ../data/Eros_flux_N998.txt
-python ../script/Eros_fig_flux.py ../data/Eros_flux_N426.txt
-python ../script/Eros_fig_flux.py ../data/Eros_flux_N436.txt
+python ../script/Eros_fig_flux.py ../data/Eros_flux_N448.txt
 ```
 
 - Single-component fit, TI vs. chi-squared (Figure X., in prep.)
