@@ -7,6 +7,15 @@
 This is a repository for Eros TPM in prep.
 Figures are made in `./plot`.
 
+## Structure 
+```
+./
+  data/
+  script/
+  .gitignored
+  README.md
+```
+
 ## Data (in /data)
 * `433.obj` (shape model of Eros, downloaded from DAMIT, `https://astro.troja.mff.cuni.cz/projects/damit/asteroid_models/view/3083`, `shape.obj`)
 * `433_eph_N448.txt` (ephemeris file paired with `433_obs_N448.txt`, made by J.B.)
