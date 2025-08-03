@@ -83,23 +83,9 @@ python ../script/Eros_fig_flux.py ../data/Eros_flux_N448.txt
 
 - Single-component fit, TI vs. chi-squared (Figure X., in prep.)
 ```
-plot_tpm_brute.py ../TPMresult_2025Jan/tpmout* -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out chi2_single_2025Jan.pdf
-plot_tpm_brute.py ../TPMresult/tpmout* -x TI --reduce --N_param 3 --logx --logy --ylim 20 200 --out chi2_single_wo_Laggerros_app.pdf
-plot_tpm_brute.py ../TPMresult_20250508_LagerrosApp/tpmout_433_brute_ti*  -x TI --reduce --N_param 2 --fixscale --logx --logy --ylim 20 200 --out chi2_single_w_Laggerros_app.pdf
-# New grid 
-plot_tpm_brute.py ../TPMres_normal_20250724/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 10 1500 --out chi2_normal_20250725.pdf
-plot_tpm_brute.py ../TPMres_landscape_20250724/lstpmout_433_brute_ti* --fixscale  -x TI --reduce --N_param 2 --logx --logy --ylim 10 1500 --out chi2_landscape_20250725.pdf
-
-plot_tpm_brute.py ../TPMres_normal_20250730/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 10 1500 --out chi2_normal_20250730.pdf
-plot_tpm_brute.py ../TPMres_normal_20250730/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 10 1500 --out chi2_normal_scale_per_obs_20250730.pdf
-
-# SST 5% error
-plot_tpm_brute.py ../TPMres_normal_20250801/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 10 1500 --out chi2_normal_20250801.pdf
-plot_tpm_brute.py ../TPMres_normal_20250801/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 10 1500 --out chi2_normal_scale_per_obs_20250801.pdf
-
-# SST 5%, Lim 10%
-plot_tpm_brute.py ../TPMres_normal_20250801_SST_Lim_error_update/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 4.5 400 --out chi2_SST_Lim_20250801.pdf
-plot_tpm_brute.py ../TPMres_normal_20250801_SST_Lim_error_update/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 1 10 --out chi2_SST_Lim_scale_per_obs_20250801.pdf
+# SST 5%, Lim+ 10%, Wolters+2008 7%
+plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 1 100 --out chi2_single_20250803.pdf
+plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 1 4 --out chi2_single_scale_per_obs_20250803.pdf
 ```
 
 - Dual-component fit, TI vs. chi-squared (Figure X., in prep.)
