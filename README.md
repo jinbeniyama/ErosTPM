@@ -89,12 +89,16 @@ python ../script/Eros_fig_loc.py
 python ../script/Eros_fig_flux.py ../data/Eros_flux_N448.txt
 ```
 
-- Single-component fit wo/NN, TI vs. chi-squared 
+- Single-component fit wo/NN
 ```
+# TI vs. chi-squared 
 # SST 5%, Lim+ 10%, Wolters+2008 7%
 plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --fixscale -x TI --reduce --N_param 2 --logx --logy --ylim 1 100 --paper P14 --out chi2_single_20250803.pdf
 #plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 1 4 --out chi2_single_scale_per_obs_20250803.pdf
 #plot_tpm_brute.py ../TPMres_20250803/tpmout_433_brute_ti* --scale_per_obs -x TI --reduce --N_param 2 --logx --logy --ylim 1 4 --out chi2_single_scale_per_obs_20250803.pdf
+
+# obs. vs model 
+python ../script/Eros_fig_obsvsmodel.py /Users/beniyama/research/ErosTPM/paper/TPMres_20250803/tpmout_433_brute_ti60_ca90_cr0.4.dat --out single_obs_vs_model_20250801.pdf
 ```
 
 - Single-component fit w/NN, TI vs. chi-squared 
