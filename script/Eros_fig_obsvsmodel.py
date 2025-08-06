@@ -9,8 +9,9 @@ Plot observations vs. model fluxes.
    2452539.768144042,
  Wolter: 1 (spec)
    2452545.9060276826
- SST   : 4 (spec)
-   2453278.5354158804, 2453278.535753845, 2453278.5361288944, 2453278.5364668127
+ SST   : 2 (merged)
+   2453278.535584863 2453278.5362978536
+   (from 2453278.5354158804, 2453278.535753845, 2453278.5361288944, 2453278.5364668127)
  AKARI : 5 (phot)
    2454199.2591583026, 2454199.397187427, 2454199.8112584595, 2454199.880273481, 2454199.949288874
 """
@@ -19,13 +20,10 @@ from argparse import ArgumentParser as ap
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
-from Eros_common import mycolor, tel2col, tel2lab, plot_spec_Eros, generate_latex_table
-
-import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-import numpy as np
-import pandas as pd
+
+from Eros_common import mycolor
+
 
 def extract_flux(f0, fixscale=False):
     """
@@ -100,6 +98,113 @@ def extract_flux(f0, fixscale=False):
         #print(f"Scafe factor = {scalefactor}")
     return df
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_8_epochs(df, epoch_list, Nparam, out=None):
+    """
+    Plots observed/model flux and standardized residuals for 8 epochs in a 4x2 layout.
+    Each main+residual panel pair is treated as a unit, with adjustable vertical spacing between units.
+    """
+
+    # Degrees of freedom
+    Ndata = len(df)
+    nu = Ndata - Nparam
+
+    col_obs = "black"
+    col_model = mycolor[0]
+    num_epochs = len(epoch_list)
+
+    # Layout configuration
+    ncols = 2
+    nrows = 4  # Number of units (epoch pairs) vertically
+    fig = plt.figure(figsize=(16, 24))
+
+    # Axis size configs
+    unit_height = 0.9 / nrows  # Total height per main+residual unit
+    panel_height = 0.38 * unit_height  # Inner panel height (main/resid)
+    v_inner_gap = 0.06 * unit_height   # Gap between main and resid
+    v_unit_gap = 0.07 * unit_height    # Gap between units
+    panel_width = 0.40
+    h_gap = 0.10
+
+    max_residual = 0
+    chi2_list = []
+    for epoch in epoch_list:
+        df_e = df[df["jd"] == epoch]
+        res = (df_e["f_obs"] - df_e["f_model"]) / df_e["ferr_obs"]
+        if not res.empty:
+            max_residual = max(max_residual, np.abs(res).max())
+            chi2 = np.sum(res ** 2)
+            chi2_list.append(chi2)
+        else:
+            chi2_list.append(0.0)
+
+    ylim_resid = np.ceil(max_residual)
+    total_chi2 = np.sum(chi2_list)
+
+    for i in range(nrows * ncols):
+        col = i % ncols
+        row = i // ncols
+
+        left = 0.07 + col * (panel_width + h_gap)
+        top_unit = 0.98 - row * (unit_height + v_unit_gap)
+
+        top_main = top_unit - panel_height
+        top_resid = top_main - v_inner_gap - panel_height
+
+        if i < num_epochs:
+            epoch = epoch_list[i]
+            df_e = df[df["jd"] == epoch]
+
+            # Main flux panel
+            ax_main = fig.add_axes([left, top_main, panel_width, panel_height])
+            ax_main.errorbar(df_e["w"], df_e["f_obs"], df_e["ferr_obs"],
+                             fmt="o", ms=5, color=col_obs, label=f"Observation ({epoch})")
+            ax_main.scatter(df_e["w"], df_e["f_model"], color=col_model,
+                            s=30, facecolor="None", marker="s", label="Best fit Model")
+            ax_main.set_ylabel(
+                "Flux [Jy]", fontsize=16)
+            ax_main.tick_params(labelbottom=False)
+            ax_main.legend(fontsize=10, loc='best')
+
+            # Residuals panel
+            ax_resid = fig.add_axes([left, top_resid, panel_width, panel_height])
+            residual = (df_e["f_obs"] - df_e["f_model"]) / df_e["ferr_obs"]
+            chi2 = chi2_list[i]
+
+            ax_resid.axhline(0, color='gray', linestyle='--', linewidth=1)
+            ax_resid.errorbar(
+                df_e["w"], residual, yerr=df_e["ferr_obs"], 
+                fmt="o", color="black", ms=5, label=f"Total $\chi^2$={chi2:.1f}")
+            ax_resid.set_xlabel("Wavelength", fontsize=16)
+            ax_resid.set_ylabel("Residual", fontsize=16)
+            ax_resid.set_ylim(-ylim_resid, ylim_resid)
+            ax_resid.legend(fontsize=10, loc='upper left')
+
+            # Align
+            x, y = -0.10, 0.5
+            ax_main.yaxis.set_label_coords(x, y)
+            ax_resid.yaxis.set_label_coords(x, y)
+
+        elif i == num_epochs:
+            # Show total chi2 in first empty unit
+            ax_info = fig.add_axes([left, top_resid, panel_width, panel_height * 2 + v_inner_gap])
+            ax_info.axis("off")
+            ax_info.text(0.5, 0.5,
+                         f"Total χ² = {total_chi2:.2f}\nReduced χ² = {total_chi2 / nu:.2f}",
+                         fontsize=16, ha="center", va="center", transform=ax_info.transAxes)
+        else:
+            ax_blank = fig.add_axes([left, top_resid, panel_width, panel_height * 2 + v_inner_gap])
+            ax_blank.axis("off")
+
+    if out:
+        plt.savefig(out)
+        plt.close()
+    else:
+        plt.show()
+
+
 
 
 def plot_all_epochs(df, epoch_list, Nparam, out=None):
@@ -135,7 +240,7 @@ def plot_all_epochs(df, epoch_list, Nparam, out=None):
 
     # --- STEP 2: plot ---
     fig = plt.figure(figsize=(15, 16))
-    gs = gridspec.GridSpec(rows * 2, cols, figure=fig, hspace=0.5, wspace=0.3)
+    gs = gridspec.GridSpec(rows * 2, cols, figure=fig, hspace=0.1, wspace=0.1)
 
     for i in range(rows * cols):
         row = (i // cols) * 2
@@ -153,7 +258,7 @@ def plot_all_epochs(df, epoch_list, Nparam, out=None):
                              fmt="o", ms=5, color=col_obs, label=f"Obs ({epoch})")
             ax_main.scatter(df_e["w"], df_e["f_model"], color=col_model,
                             s=20, facecolor="None", marker="o", label="Model")
-            ax_main.set_ylabel("Flux [Jy]", fontsize=10)
+            ax_main.set_ylabel("Flux [Jy]")
             ax_main.tick_params(labelbottom=False)
             ax_main.legend(fontsize=8).set_alpha(1)
 
@@ -178,7 +283,7 @@ def plot_all_epochs(df, epoch_list, Nparam, out=None):
 
             fig.add_subplot(gs[row + 1, col]).axis("off")
 
-    plt.tight_layout()
+    #plt.tight_layout()
     if out:
         plt.savefig(out)
         plt.close()
@@ -207,6 +312,7 @@ def introduce_sf(df, epochs_spec, df_sf):
         df.loc[df["jd"]==e, "f_model"] *= sf**2
     return df
 
+
 if __name__ == "__main__":
     parser = ap(
         description="Plot obs vs. model fluxes.")
@@ -223,8 +329,8 @@ if __name__ == "__main__":
         "--Nparam", default=2,
         help="Number of parameters")
     parser.add_argument(
-        "--out", type=str, default=None,
-        help="Output figure name")
+        "--out", type=str, default="obsmodel",
+        help="Output figure name wo/extension")
     args = parser.parse_args()
 
     # Results of TPM
@@ -240,6 +346,8 @@ if __name__ == "__main__":
         # Best fit thermal inertia and thetabar
         TI = args.TI
         Htheta = args.Htheta
+
+        assert False, "In prep."
 
         if args.sf:
             # Chi2 and scale factors
@@ -269,4 +377,11 @@ if __name__ == "__main__":
     else:
         df = extract_flux(f_res)
         epochs = sorted(list(set(df.jd)))
-        plot_all_epochs(df, epochs, Nparam, out)
+        #plot_all_epochs(df, epochs, Nparam, out)
+        Nfig = int(np.ceil(len(epochs)/8))
+        for n in range(Nfig):
+            idx0, idx1 = n*8, (n+1)*8
+            epochs_n = epochs[idx0:idx1]
+            df_n = df[df["jd"].isin(epochs_n)]
+            out_n = f"{out}_{n+1}.pdf"
+            plot_8_epochs(df_n, epochs_n, Nparam, out_n)
